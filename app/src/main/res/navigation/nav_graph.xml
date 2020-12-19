@@ -8,6 +8,19 @@
     <fragment
         android:id="@+id/feedFragment"
         android:name="ru.netology.motivationapp.fragments.FeedFragment"
-        android:label="feed_fragment"
-        tools:layout="@layout/feed_fragment" />
+        android:label="feed_fragment!"
+        tools:layout="@layout/feed_fragment" >
+        <action
+            android:id="@+id/action_feedFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="ru.netology.motivationapp.fragments.CreatePostFragment"
+        android:label="fragment_create_pos!"
+        tools:layout="@layout/fragment_create_post" />
 </navigation>
