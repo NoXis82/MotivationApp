@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import ru.netology.motivationapp.R
 import ru.netology.motivationapp.adapter.IOnInteractionListener
 import ru.netology.motivationapp.adapter.PostsAdapter
@@ -22,6 +24,8 @@ class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
     private val swipeController  = SwipeController()
     private val itemTouchHelper = ItemTouchHelper(swipeController)
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,6 +70,5 @@ class FeedFragment : Fragment() {
         return binding.root
 
     }
-
 
 }
