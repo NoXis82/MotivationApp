@@ -2,7 +2,6 @@ package ru.netology.motivationapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +9,7 @@ import ru.netology.motivationapp.databinding.PostCardBinding
 import ru.netology.motivationapp.dto.*
 
 class PostsAdapter(
+
     private val onInteractionListener: IOnInteractionListener
 ) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
 
@@ -26,8 +26,6 @@ class PostsAdapter(
         val post = getItem(position)
         holder.bind(post)
     }
-
-
 
 }
 
