@@ -46,14 +46,53 @@ class FeedFragment : Fragment() {
             }
 
             override fun onRemove(post: Post) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onEdit(post: Post) {
-                TODO("Not yet implemented")
+                viewModel.remove(post.id)
             }
 
         })
+
+        val swipe = object : SwipeHelper(requireContext(), binding.rvPostList, 200) {
+            override fun instantiateSwipeButtons(
+                viewHolder: RecyclerView.ViewHolder,
+                buffer: MutableList<SwipeButton>
+            ) {
+                buffer.add(
+                    SwipeButton(
+                        requireContext(),
+                        "Delete",
+                        0,
+                        Color.parseColor("#FF3C30"),
+                        object : IOnSwipeControllerActions {
+                            override fun onClick(pos: Int) {
+                                viewModel.remove(adapter.currentList[pos].id)
+                                adapter.notifyItemRemoved(pos)
+                                adapter.notifyItemRangeChanged(pos, adapter.itemCount)
+                            }
+
+                        }
+                    )
+                )
+                buffer.add(
+                    SwipeButton(
+                        requireContext(),
+                        "Edit",
+                        0,
+                        Color.parseColor("#FF9502"),
+                        object : IOnSwipeControllerActions {
+                            override fun onClick(pos: Int) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Edit post id: $pos",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                            }
+
+                        }
+                    )
+                )
+            }
+
+        }
 
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_createPostFragment)
@@ -62,51 +101,6 @@ class FeedFragment : Fragment() {
         binding.rvPostList.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(posts)
-        }
-
-        val swipe = object : SwipeHelper(requireContext(), binding.rvPostList, 200) {
-            override fun instantiateSwipeButtons(
-                    viewHolder: RecyclerView.ViewHolder,
-                    buffer: MutableList<SwipeButton>
-            ) {
-                buffer.add(
-                        SwipeButton(
-                                requireContext(),
-                                "Delete",
-                                0,
-                                Color.parseColor("#FF3C30"),
-                                object : IOnSwipeControllerActions {
-                                    override fun onClick(pos: Int) {
-                                        Toast.makeText(
-                                                requireContext(),
-                                                "Delete post id: $pos",
-                                                Toast.LENGTH_LONG)
-                                                .show()
-                                    }
-
-                                }
-                        )
-                )
-                buffer.add(
-                        SwipeButton(
-                                requireContext(),
-                                "Edit",
-                                0,
-                                Color.parseColor("#FF9502"),
-                                object : IOnSwipeControllerActions {
-                                    override fun onClick(pos: Int) {
-                                        Toast.makeText(
-                                                requireContext(),
-                                                "Edit post id: $pos",
-                                                Toast.LENGTH_LONG)
-                                                .show()
-                                    }
-
-                                }
-                        )
-                )
-            }
-
         }
 
         return binding.root

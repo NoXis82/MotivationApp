@@ -13,6 +13,7 @@ class PostsAdapter(
     private val onInteractionListener: IOnInteractionListener
 ) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val postView = PostCardBinding.inflate(
             LayoutInflater.from(parent.context),

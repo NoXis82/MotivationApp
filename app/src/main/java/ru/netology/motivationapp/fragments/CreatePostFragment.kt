@@ -1,6 +1,7 @@
 package ru.netology.motivationapp.fragments
 
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import ru.netology.motivationapp.R
@@ -24,13 +26,6 @@ class CreatePostFragment : Fragment() {
     ): View? {
         val binding = FragmentCreatePostBinding.inflate(layoutInflater)
 
-
-
-//        binding.editQuery.addTextChangedListener {
-//            if (it != null) {
-//                binding.btnSave.isClickable = it.trim().isNotEmpty()
-//            }
-//        }
 
         binding.btnSave.setOnClickListener {
             Toast.makeText(

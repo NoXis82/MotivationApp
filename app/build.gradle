@@ -45,8 +45,9 @@ dependencies {
     def activity_version = "1.1.0"
     def lifecycle_version = "2.2.0"
     def nav_version = "2.3.1"
+    def design_version = "23.0.1"
 
-
+    implementation "com.android.support:design:$design_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.fragment:fragment-ktx:$ktx_version"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"

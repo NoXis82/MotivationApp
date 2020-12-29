@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import ru.netology.motivationapp.dto.Post
 
 class PostRepositoryInMemoryImpl: IPostRepository {
-    private val posts = listOf(
+    private var posts = listOf(
         Post(
             id = 1,
             author = "Нетология",
@@ -41,8 +41,12 @@ class PostRepositoryInMemoryImpl: IPostRepository {
         TODO("Not yet implemented")
     }
 
-    override fun removePost() {
-        TODO("Not yet implemented")
+
+    override fun removePost(id: Long) {
+        posts = posts.filter { post ->
+            post.id != id
+        }
+        data.value = posts
     }
 
     override fun share() {
