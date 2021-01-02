@@ -69,9 +69,9 @@
             app:layout_constraintTop_toBottomOf="@id/barrierTop"
             tools:text="content" />
 
-        <FrameLayout
-            android:id="@+id/frame_video_view"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/iv_image_view"
+            android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:layout_margin="@dimen/common_spacing"
             android:visibility="gone"
@@ -80,22 +80,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/content">
 
-<!--            <ImageButton-->
-<!--                android:id="@+id/buttonPlay"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:background="@android:color/transparent"-->
-<!--                app:srcCompat="@drawable/ic_play_circle_48"-->
-<!--                android:contentDescription="@string/description_video_play" />-->
 
-        </FrameLayout>
+        </ImageView>
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrierMid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/frame_video_view"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image_view"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="content" />
 

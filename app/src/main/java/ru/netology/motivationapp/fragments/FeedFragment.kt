@@ -11,7 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+
 import ru.netology.motivationapp.R
+import ru.netology.motivationapp.fragments.CreatePostFragment.Companion.author
+import ru.netology.motivationapp.fragments.CreatePostFragment.Companion.content
+
+
 import ru.netology.motivationapp.adapter.IOnInteractionListener
 import ru.netology.motivationapp.adapter.PostsAdapter
 import ru.netology.motivationapp.databinding.FeedFragmentBinding
@@ -45,10 +50,6 @@ class FeedFragment : Fragment() {
                 TODO("Not yet implemented")
             }
 
-            override fun onRemove(post: Post) {
-                viewModel.remove(post.id)
-            }
-
         })
 
         val swipe = object : SwipeHelper(requireContext(), binding.rvPostList, 200) {
@@ -80,11 +81,13 @@ class FeedFragment : Fragment() {
                         Color.parseColor("#FF9502"),
                         object : IOnSwipeControllerActions {
                             override fun onClick(pos: Int) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Edit post id: $pos",
-                                    Toast.LENGTH_LONG)
-                                    .show()
+
+                                findNavController().navigate(R.id.action_feedFragment_to_createPostFragment,
+                                Bundle().apply {
+                                    author = adapter.currentList[pos].author
+                                    content = adapter.currentList[pos].content
+                                })
+
                             }
 
                         }

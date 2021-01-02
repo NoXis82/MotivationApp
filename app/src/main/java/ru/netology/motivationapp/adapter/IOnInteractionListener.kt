@@ -6,6 +6,5 @@ interface IOnInteractionListener {
     fun onLike(post: Post)
     fun onDisLike(post: Post)
     fun onShare(post: Post)
-    fun onRemove(post: Post)
 
 }

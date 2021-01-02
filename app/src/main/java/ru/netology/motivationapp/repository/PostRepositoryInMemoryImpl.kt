@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import ru.netology.motivationapp.dto.Post
 
 class PostRepositoryInMemoryImpl: IPostRepository {
+
     private var posts = listOf(
         Post(
             id = 1,
