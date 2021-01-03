@@ -11,8 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import ru.netology.motivationapp.R
 import ru.netology.motivationapp.databinding.FragmentCreatePostBinding
+import ru.netology.motivationapp.utils.AndroidUtils
 import ru.netology.motivationapp.utils.StringArg
 import ru.netology.motivationapp.viewmodel.PostViewModel
 import java.io.*
@@ -21,6 +23,7 @@ class CreatePostFragment : Fragment() {
 
     private val REQUEST_CODE = 100
     private lateinit var binding: FragmentCreatePostBinding
+    private var filename: String = ""
 
     companion object {
         var Bundle.idPost: String? by StringArg
@@ -39,9 +42,7 @@ class CreatePostFragment : Fragment() {
         arguments?.content.let(binding.editContent::setText)
 
 
-
-
-        binding.bottomAppBar.apply {
+       binding.bottomAppBar.apply {
             setOnMenuItemClickListener {
                 item ->
                 when(item.itemId) {
@@ -55,45 +56,61 @@ class CreatePostFragment : Fragment() {
                 }
             }
         }
-
-
+        binding.btnDeleteImage.setOnClickListener {
+                binding.viewLoadImage.setImageDrawable(null)
+                binding.frameImage.visibility = View.GONE
+                filename = ""
+        }
 
         binding.btnSave.setOnClickListener {
-            Toast.makeText(
-                context,
-                binding.editContent.text,
-                Toast.LENGTH_SHORT
-            ).show()
+            val drawable = binding.viewLoadImage.drawable
+            if (drawable != null) {
+                val bitmap = drawable.toBitmap()
+                saveImageToExternal(bitmap)
+            }
+
+            viewModel.changeContent(
+                binding.editQuery.text.toString(),
+                binding.editContent.text.toString(),
+                filename
+            )
+            viewModel.savePost()
+            AndroidUtils.hideKeyboard(requireView())
+            findNavController().navigateUp()
+
         }
+
+
+
       return binding.root
+    }
+
+    private fun saveImageToExternal(bitmap: Bitmap) {
+        val fileDir = File(context?.filesDir, "Images")
+        fileDir.mkdir()
+        val file = File(fileDir, filename)
+        if (file.exists()) {
+            file.delete()
+        }
+        try {
+            val streamOut = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, streamOut)
+            streamOut.flush()
+            streamOut.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(context, "Error save image!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
             binding.viewLoadImage.setImageURI(data?.data)
-            val filename = File(data?.data?.path.toString()).name
-            val drawable = binding.viewLoadImage.drawable
-            val bitmap = drawable.toBitmap()
-            val fileDir = File(context?.filesDir, "Images")
-            fileDir.mkdir()
-            val file = File(fileDir, "$filename.jpg")
-            if (file.exists()) {
-                file.delete()
-            }
-            try {
-                val streamOut = FileOutputStream(file)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, streamOut)
-                streamOut.flush()
-                streamOut.close()
-                Toast.makeText(context, "Save image successful", Toast.LENGTH_SHORT).show()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Toast.makeText(context, "Error save image!", Toast.LENGTH_SHORT).show()
-            }
+            binding.frameImage.visibility = View.VISIBLE
+            filename = File(data?.data?.path.toString()).name + ".jpg"
        }
-
-
     }
+
 
 }

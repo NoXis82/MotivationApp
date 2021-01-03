@@ -63,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_spacing"
             android:layout_marginBottom="@dimen/common_spacing"
+            android:gravity="top|start"
             android:autoLink="web"
             app:layout_constraintBottom_toTopOf="@id/barrierMid"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,14 +75,11 @@
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:layout_margin="@dimen/common_spacing"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/barrierMid"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/content">
+            app:layout_constraintTop_toBottomOf="@+id/content"/>
 
-
-        </ImageView>
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrierMid"

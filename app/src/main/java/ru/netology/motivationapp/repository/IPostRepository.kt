@@ -7,7 +7,7 @@ interface IPostRepository {
     fun like()
     fun dislike()
     fun getAll(): LiveData<List<Post>>
-    fun savePost()
+    fun savePost(post: Post)
     fun editPost()
     fun removePost(id: Long)
     fun share()
