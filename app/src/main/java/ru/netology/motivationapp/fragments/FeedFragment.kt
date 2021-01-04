@@ -2,21 +2,20 @@ package ru.netology.motivationapp.fragments
 
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-
 import ru.netology.motivationapp.R
 import ru.netology.motivationapp.fragments.CreatePostFragment.Companion.author
 import ru.netology.motivationapp.fragments.CreatePostFragment.Companion.content
-
-
+import ru.netology.motivationapp.fragments.CreatePostFragment.Companion.pictureName
 import ru.netology.motivationapp.adapter.IOnInteractionListener
 import ru.netology.motivationapp.adapter.PostsAdapter
 import ru.netology.motivationapp.databinding.FeedFragmentBinding
@@ -25,11 +24,17 @@ import ru.netology.motivationapp.swipecontroller.IOnSwipeControllerActions
 import ru.netology.motivationapp.swipecontroller.SwipeButton
 import ru.netology.motivationapp.swipecontroller.SwipeHelper
 import ru.netology.motivationapp.viewmodel.PostViewModel
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -38,6 +43,7 @@ class FeedFragment : Fragment() {
         val binding = FeedFragmentBinding.inflate(layoutInflater)
 
         val adapter = PostsAdapter(object : IOnInteractionListener {
+
             override fun onLike(post: Post) {
                 TODO("Not yet implemented")
             }
@@ -81,11 +87,12 @@ class FeedFragment : Fragment() {
                         Color.parseColor("#FF9502"),
                         object : IOnSwipeControllerActions {
                             override fun onClick(pos: Int) {
-
+                                viewModel.editPost(adapter.currentList[pos])
                                 findNavController().navigate(R.id.action_feedFragment_to_createPostFragment,
                                 Bundle().apply {
                                     author = adapter.currentList[pos].author
                                     content = adapter.currentList[pos].content
+                                    pictureName = adapter.currentList[pos].pictureName
                                 })
 
                             }
@@ -103,7 +110,7 @@ class FeedFragment : Fragment() {
 
         binding.rvPostList.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(posts)
+            adapter.submitList(posts.sortedWith(compareBy { it.dateCompare }))
         }
 
         return binding.root

@@ -65,6 +65,7 @@
             android:layout_marginBottom="@dimen/common_spacing"
             android:gravity="top|start"
             android:autoLink="web"
+            android:linksClickable="true"
             app:layout_constraintBottom_toTopOf="@id/barrierMid"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/barrierTop"

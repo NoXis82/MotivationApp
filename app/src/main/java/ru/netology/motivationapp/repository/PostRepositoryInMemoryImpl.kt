@@ -3,7 +3,9 @@ package ru.netology.motivationapp.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.netology.motivationapp.dto.Post
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 class PostRepositoryInMemoryImpl: IPostRepository {
@@ -15,6 +17,7 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             content = "Привет 1",
             datePublished = "11/12/2020 15:57",
             pictureName = "",
+            dateCompare = 0L
         ),
         Post(
             id = nextId++,
@@ -22,9 +25,46 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             content = "Привет 2",
             datePublished = "14/12/2020 15:57",
             pictureName = "23.jpg",
+            dateCompare = 0L
+        ),
+        Post(
+            id = nextId++,
+            author = "Хабр",
+            content = "Привет 3",
+            datePublished = "16/12/2020 15:57",
+            pictureName = "",
+            dateCompare = 0L
+        ),
+        Post(
+            id = nextId++,
+            author = "Хабр",
+            content = "Привет 4",
+            datePublished = "15/12/2020 15:57",
+            pictureName = "",
+            dateCompare = 0L
+        ),
+        Post(
+            id = nextId++,
+            author = "Аноним",
+            content = "Привет 5",
+            datePublished = "10/12/2020 15:57",
+            pictureName = "",
+            dateCompare = 0L
+        ),
+        Post(
+            id = nextId++,
+            author = "Аноним",
+            content = "Привет 6",
+            datePublished = "04/01/2021 15:57",
+            pictureName = "",
+            dateCompare = 0L
         )
     )
+
+
+
     private val data = MutableLiveData(posts)
+
 
     override fun like() {
         TODO("Not yet implemented")
@@ -39,29 +79,35 @@ class PostRepositoryInMemoryImpl: IPostRepository {
     override fun savePost(post: Post) {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH)
         val currentDate = dateFormat.format(Date())
-
-       if (post.id == 0L) {
+      if (post.id == 0L) {
            posts = listOf(
                post.copy(
                    id = nextId++,
                     author = post.author,
                    content = post.content,
                    datePublished = currentDate,
-                   pictureName = post.pictureName)
+                   pictureName = post.pictureName,
+                   dateCompare = Date().time
+                   )
            ) + posts
+
            data.value = posts
            return
        }
         posts = posts.map {
-            if (it.id != post.id) it else it.copy(content = post.content)
+            if (it.id != post.id) {
+                it
+            } else {
+                it.copy(
+                    author = post.author,
+                    content = post.content,
+                    pictureName = post.pictureName
+                )
+
+            }
         }
         data.value = posts
     }
-
-    override fun editPost() {
-        TODO("Not yet implemented")
-    }
-
 
     override fun removePost(id: Long) {
         posts = posts.filter { post ->
@@ -73,6 +119,5 @@ class PostRepositoryInMemoryImpl: IPostRepository {
     override fun share() {
         TODO("Not yet implemented")
     }
-
 
 }

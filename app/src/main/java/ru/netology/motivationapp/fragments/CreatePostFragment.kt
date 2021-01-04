@@ -3,6 +3,7 @@ package ru.netology.motivationapp.fragments
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,10 +27,9 @@ class CreatePostFragment : Fragment() {
     private var filename: String = ""
 
     companion object {
-        var Bundle.idPost: String? by StringArg
         var Bundle.author: String? by StringArg
-        var Bundle.published: String? by StringArg
         var Bundle.content: String? by StringArg
+        var Bundle.pictureName: String? by StringArg
     }
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
     override fun onCreateView(
@@ -41,6 +41,18 @@ class CreatePostFragment : Fragment() {
         arguments?.author.let(binding.editQuery::setText)
         arguments?.content.let(binding.editContent::setText)
 
+            if (arguments?.pictureName?.isNotEmpty() == true) {
+                binding.frameImage.visibility = View.VISIBLE
+                try {
+                    val fileDir = File(binding.root.context?.filesDir, "Images")
+                    fileDir.mkdir()
+                    val file = File(fileDir, arguments?.pictureName.toString())
+                    val bitmap = BitmapFactory.decodeFile(file.toString())
+                    binding.viewLoadImage.setImageBitmap(bitmap)
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
 
        binding.bottomAppBar.apply {
             setOnMenuItemClickListener {
@@ -59,6 +71,7 @@ class CreatePostFragment : Fragment() {
         binding.btnDeleteImage.setOnClickListener {
                 binding.viewLoadImage.setImageDrawable(null)
                 binding.frameImage.visibility = View.GONE
+            //удаление файла из Images
                 filename = ""
         }
 

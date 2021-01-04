@@ -13,14 +13,14 @@ class PostViewModel: ViewModel() {
         author = "",
         content = "",
         datePublished = "",
-        pictureName = ""
+        pictureName = "",
+        dateCompare = 0
     )
 
     private val repository: IPostRepository = PostRepositoryInMemoryImpl()
     val data = repository.getAll()
     private val edited = MutableLiveData(empty)
     fun remove(id: Long) = repository.removePost(id)
-
     fun savePost() {
         edited.value?.let {
             repository.savePost(it)
@@ -31,23 +31,16 @@ class PostViewModel: ViewModel() {
     fun changeContent(author: String, content: String, pictureName: String) {
         val contentText = content.trim()
         val authorText = author.trim()
-        if (edited.value?.content == contentText) {
-            return
+        if (edited.value?.content != contentText) {
+            edited.value = edited.value?.copy(content = contentText)
         }
-        edited.value = edited.value?.copy(content = contentText)
-        if (edited.value?.author == authorText) {
-            return
+        if (edited.value?.author != authorText) {
+            edited.value = edited.value?.copy(author = authorText)
         }
-        edited.value = edited.value?.copy(author = authorText)
-        if (edited.value?.pictureName == pictureName) {
-            return
+        if (edited.value?.pictureName != pictureName) {
+            edited.value = edited.value?.copy(pictureName = pictureName)
         }
-        edited.value = edited.value?.copy(pictureName = pictureName)
-
-
     }
-
-
 
     fun editPost(post: Post) {
         edited.value = post
