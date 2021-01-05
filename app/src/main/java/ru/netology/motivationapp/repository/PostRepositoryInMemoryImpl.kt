@@ -17,7 +17,7 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             content = "Привет 1",
             datePublished = "11/12/2020 15:57",
             pictureName = "",
-            dateCompare = 0L
+            dateCompare = nextId
         ),
         Post(
             id = nextId++,
@@ -25,7 +25,7 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             content = "Привет 2",
             datePublished = "14/12/2020 15:57",
             pictureName = "23.jpg",
-            dateCompare = 0L
+            dateCompare = nextId
         ),
         Post(
             id = nextId++,
@@ -33,7 +33,7 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             content = "Привет 3",
             datePublished = "16/12/2020 15:57",
             pictureName = "",
-            dateCompare = 0L
+            dateCompare = nextId
         ),
         Post(
             id = nextId++,
@@ -41,7 +41,7 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             content = "Привет 4",
             datePublished = "15/12/2020 15:57",
             pictureName = "",
-            dateCompare = 0L
+            dateCompare = nextId
         ),
         Post(
             id = nextId++,
@@ -49,7 +49,7 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             content = "Привет 5",
             datePublished = "10/12/2020 15:57",
             pictureName = "",
-            dateCompare = 0L
+            dateCompare = nextId
         ),
         Post(
             id = nextId++,
@@ -57,7 +57,7 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             content = "Привет 6",
             datePublished = "04/01/2021 15:57",
             pictureName = "",
-            dateCompare = 0L
+            dateCompare = nextId
         )
     )
 

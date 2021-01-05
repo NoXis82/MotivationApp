@@ -37,11 +37,12 @@ class CreatePostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCreatePostBinding.inflate(layoutInflater)
-
         arguments?.author.let(binding.editQuery::setText)
         arguments?.content.let(binding.editContent::setText)
-
-            if (arguments?.pictureName?.isNotEmpty() == true) {
+        if (arguments?.pictureName?.isNotEmpty() == true) {
+            filename = arguments?.pictureName.toString()
+        }
+        if (arguments?.pictureName?.isNotEmpty() == true) {
                 binding.frameImage.visibility = View.VISIBLE
                 try {
                     val fileDir = File(binding.root.context?.filesDir, "Images")
@@ -52,6 +53,8 @@ class CreatePostFragment : Fragment() {
                 } catch (e: FileNotFoundException) {
                     e.printStackTrace()
                 }
+            } else {
+                binding.frameImage.visibility = View.GONE
             }
 
        binding.bottomAppBar.apply {
@@ -77,7 +80,7 @@ class CreatePostFragment : Fragment() {
 
         binding.btnSave.setOnClickListener {
             val drawable = binding.viewLoadImage.drawable
-            if (drawable != null) {
+            if (drawable != null && filename.isNotEmpty()) {
                 val bitmap = drawable.toBitmap()
                 saveImageToExternal(bitmap)
             }

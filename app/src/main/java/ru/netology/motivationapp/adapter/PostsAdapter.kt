@@ -59,13 +59,23 @@ class PostViewHolder(
                     e.printStackTrace()
                 }
             }
+
+            binding.author.setOnClickListener {
+                onInteractionListener.onPostAuthorClick(post)
+            }
+
+            binding.avatar.setOnClickListener {
+                onInteractionListener.onPostAuthorClick(post)
+            }
+
+
+
         }
     }
 }
 
 
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
-
 
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem.id == newItem.id
@@ -74,5 +84,4 @@ class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem == newItem
     }
-
 }

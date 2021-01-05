@@ -17,10 +17,32 @@
             app:exitAnim="@anim/to_right"
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left" />
+        <action
+            android:id="@+id/action_feedFragment_to_authorListFragment"
+            app:destination="@id/authorListFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
+
     </fragment>
+
     <fragment
         android:id="@+id/createPostFragment"
         android:name="ru.netology.motivationapp.fragments.CreatePostFragment"
         android:label="fragment_create_pos!"
         tools:layout="@layout/fragment_create_post" />
+    <fragment
+        android:id="@+id/authorListFragment"
+        android:name="ru.netology.motivationapp.fragments.AuthorListFragment"
+        android:label="fragment_author_list!"
+        tools:layout="@layout/fragment_author_list" >
+        <action
+            android:id="@+id/action_authorListFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"/>
+    </fragment>
 </navigation>
