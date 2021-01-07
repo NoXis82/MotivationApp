@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pb_load_list"
         tools:listitem="@layout/post_card" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -24,5 +24,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_24dp"/>
+
+    <ProgressBar
+        android:id="@+id/pb_load_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@+id/rv_post_list"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

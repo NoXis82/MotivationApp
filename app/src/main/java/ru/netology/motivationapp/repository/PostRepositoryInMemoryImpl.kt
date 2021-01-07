@@ -58,12 +58,45 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             datePublished = "04/01/2021 15:57",
             pictureName = "",
             dateCompare = nextId
+        ),
+        Post(
+            id = nextId++,
+            author = "Аноним",
+            content = "Привет 7",
+            datePublished = "04/01/2021 15:57",
+            pictureName = "",
+            dateCompare = nextId
+        ),
+        Post(
+            id = nextId++,
+            author = "Аноним",
+            content = "Привет 8",
+            datePublished = "04/01/2021 15:57",
+            pictureName = "",
+            dateCompare = nextId
+        ),
+        Post(
+            id = nextId++,
+            author = "Аноним",
+            content = "Привет 9",
+            datePublished = "04/01/2021 15:57",
+            pictureName = "",
+            dateCompare = nextId
+        ),
+        Post(
+            id = nextId++,
+            author = "Аноним",
+            content = "Привет 10",
+            datePublished = "04/01/2021 15:57",
+            pictureName = "",
+            dateCompare = nextId
         )
+
     )
 
 
-
     private val data = MutableLiveData(posts)
+
 
 
     override fun like() {
