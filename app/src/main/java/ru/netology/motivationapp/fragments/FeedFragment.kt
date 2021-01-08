@@ -7,7 +7,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.AbsListView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -28,15 +28,12 @@ import ru.netology.motivationapp.swipecontroller.SwipeHelper
 import ru.netology.motivationapp.viewmodel.PostViewModel
 
 
-
 class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
-    private val pageItemLimit = 5
+    private var pageItemLimit = 20
     private var isLoading = false
-    private var numberPage = 1
-
     lateinit var adapter: PostsAdapter
-lateinit var binding: FeedFragmentBinding
+    lateinit var binding: FeedFragmentBinding
 
 
     override fun onCreateView(
@@ -44,54 +41,51 @@ lateinit var binding: FeedFragmentBinding
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-
+        binding = FeedFragmentBinding.inflate(layoutInflater)
         getPageItem()
 
         object : SwipeHelper(requireContext(), binding.rvPostList, 200) {
             override fun instantiateSwipeButtons(
-                viewHolder: RecyclerView.ViewHolder,
-                buffer: MutableList<SwipeButton>
+                    viewHolder: RecyclerView.ViewHolder,
+                    buffer: MutableList<SwipeButton>
             ) {
                 buffer.add(
-                    SwipeButton(
-                        requireContext(),
-                        "Delete",
-                        0,
-                        Color.parseColor("#FF3C30"),
-                        object : IOnSwipeControllerActions {
-                            override fun onClick(pos: Int) {
-                                viewModel.remove(adapter.currentList[pos].id)
-                                adapter.notifyItemRemoved(pos)
-                                adapter.notifyItemRangeChanged(pos, adapter.itemCount)
-                            }
+                        SwipeButton(
+                                requireContext(),
+                                "Delete",
+                                0,
+                                Color.parseColor("#FF3C30"),
+                                object : IOnSwipeControllerActions {
+                                    override fun onClick(pos: Int) {
+                                        viewModel.remove(adapter.currentList[pos].id)
+                                        adapter.notifyItemRemoved(pos)
+                                        adapter.notifyItemRangeChanged(pos, adapter.itemCount)
+                                    }
 
-                        }
-                    )
+                                }
+                        )
                 )
                 buffer.add(
-                    SwipeButton(
-                        requireContext(),
-                        "Edit",
-                        0,
-                        Color.parseColor("#FF9502"),
-                        object : IOnSwipeControllerActions {
-                            override fun onClick(pos: Int) {
-                                viewModel.editPost(adapter.currentList[pos])
-                                findNavController().navigate(
-                                    R.id.action_feedFragment_to_createPostFragment,
-                                    Bundle().apply {
-                                        author = adapter.currentList[pos].author
-                                        content = adapter.currentList[pos].content
-                                        pictureName = adapter.currentList[pos].pictureName
-                                    })
-
-                            }
-
-                        }
-                    )
+                        SwipeButton(
+                                requireContext(),
+                                "Edit",
+                                0,
+                                Color.parseColor("#FF9502"),
+                                object : IOnSwipeControllerActions {
+                                    override fun onClick(pos: Int) {
+                                        viewModel.editPost(adapter.currentList[pos])
+                                        findNavController().navigate(
+                                                R.id.action_feedFragment_to_createPostFragment,
+                                                Bundle().apply {
+                                                    author = adapter.currentList[pos].author
+                                                    content = adapter.currentList[pos].content
+                                                    pictureName = adapter.currentList[pos].pictureName
+                                                })
+                                    }
+                                }
+                        )
                 )
             }
-
         }
 
         binding.fab.setOnClickListener {
@@ -100,41 +94,46 @@ lateinit var binding: FeedFragmentBinding
 
         binding.rvPostList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val visibleItemCount = (recyclerView.layoutManager as LinearLayoutManager).childCount
-                val firstVisibleItem = (recyclerView.layoutManager as LinearLayoutManager)
-                    .findFirstCompletelyVisibleItemPosition()
-                val totalItemCount = (recyclerView.layoutManager as LinearLayoutManager).itemCount
-                if (!isLoading) {
-                    Toast.makeText(
-                        requireContext(),
-                        "vis: $visibleItemCount , first: $firstVisibleItem , tot:$totalItemCount",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    if ((visibleItemCount + firstVisibleItem) >= totalItemCount) {
-                        Toast.makeText(requireContext(), "onScroll fun", Toast.LENGTH_SHORT)
-                            .show()
-                        numberPage++
-                        getPageItem()
-                    }
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isLoading = true
                 }
             }
 
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val visibleItemCount = (recyclerView.layoutManager as LinearLayoutManager)
+                        .childCount
+                val firstVisibleItem = (recyclerView.layoutManager as LinearLayoutManager)
+                        .findFirstVisibleItemPosition()
+                val totalItemCount = (recyclerView.layoutManager as LinearLayoutManager)
+                        .itemCount
+                if (isLoading && (visibleItemCount + firstVisibleItem >= totalItemCount)) {
+                    isLoading = false
+                    getPageItem()
+                }
+            }
         })
 
         return binding.root
     }
 
     private fun getPageItem() {
-        isLoading = true
-        binding = FeedFragmentBinding.inflate(layoutInflater)
-        val rangeItem = numberPage * pageItemLimit
-
         binding.pbLoadList.visibility = View.VISIBLE
         Handler().postDelayed({
             if (this::adapter.isInitialized) {
-                adapter.notifyDataSetChanged()
+                pageItemLimit += pageItemLimit
+                binding.rvPostList.adapter = adapter
+                viewModel.data.observe(viewLifecycleOwner) { posts ->
+                    adapter.submitList(posts
+                            .asSequence()
+                            .sortedWith(compareBy { it.dateCompare })
+                            .toList()
+                            .takeLast(pageItemLimit)
+                    )
+                }
+                binding.rvPostList.smoothScrollToPosition(pageItemLimit / 2)
             } else {
                 adapter = PostsAdapter(object : IOnInteractionListener {
                     override fun onLike(post: Post) {
@@ -151,30 +150,26 @@ lateinit var binding: FeedFragmentBinding
 
                     override fun onPostAuthorClick(post: Post) {
                         findNavController().navigate(
-                            R.id.action_feedFragment_to_authorListFragment,
-                            Bundle().apply {
-                                authorFilter = post.author
-                            }
-
+                                R.id.action_feedFragment_to_authorListFragment,
+                                Bundle().apply {
+                                    authorFilter = post.author
+                                }
                         )
-
                     }
-
                 })
                 binding.rvPostList.adapter = adapter
+                viewModel.data.observe(viewLifecycleOwner) { posts ->
+                    adapter.submitList(posts
+                            .asSequence()
+                            .sortedWith(compareBy { it.dateCompare })
+                            .toList()
+                            .takeLast(pageItemLimit)
+                    )
+                }
+                binding.rvPostList.smoothScrollToPosition(adapter.itemCount)
             }
-            isLoading = false
             binding.pbLoadList.visibility = View.GONE
-            viewModel.data.observe(viewLifecycleOwner) { posts ->
-                adapter.submitList(
-                    posts
-                        .drop(0)
-                        .take(rangeItem)
-                        .sortedWith(compareBy { it.dateCompare })
-                )
-            }
-
-        }, 1500)
+        }, 1000)
     }
 
 }

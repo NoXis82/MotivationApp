@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@android:color/transparent"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/rv_post_list"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

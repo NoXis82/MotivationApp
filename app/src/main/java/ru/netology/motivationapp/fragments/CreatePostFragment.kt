@@ -95,10 +95,7 @@ class CreatePostFragment : Fragment() {
             findNavController().navigateUp()
 
         }
-
-
-
-      return binding.root
+        return binding.root
     }
 
     private fun saveImageToExternal(bitmap: Bitmap) {
