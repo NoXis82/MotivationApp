@@ -2,12 +2,14 @@ package ru.netology.motivationapp.adapter
 
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.netology.motivationapp.R
 import ru.netology.motivationapp.databinding.PostCardBinding
 import ru.netology.motivationapp.dto.*
 import java.io.File
@@ -45,6 +47,15 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.datePublished
             content.text = post.content
+            btnLikes.text = post.likes.toString()
+            btnDislike.text = post.dislike.toString()
+            if ((post.likes - post.dislike) >= 0) {
+                tvRatingValue.setTextColor(Color.GREEN)
+            } else {
+                tvRatingValue.setTextColor(Color.RED)
+            }
+            tvRatingValue.text = (post.likes - post.dislike).toString()
+
             if (post.pictureName == "") {
                 binding.ivImageView.visibility = View.GONE
             } else {
@@ -68,6 +79,13 @@ class PostViewHolder(
                 onInteractionListener.onPostAuthorClick(post)
             }
 
+            binding.btnLikes.setOnClickListener {
+                onInteractionListener.onLike(post)
+            }
+
+            binding.btnDislike.setOnClickListener {
+                onInteractionListener.onDisLike(post)
+            }
 
 
         }

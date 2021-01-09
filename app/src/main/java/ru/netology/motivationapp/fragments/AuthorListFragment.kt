@@ -101,9 +101,10 @@ class AuthorListFragment : Fragment() {
         binding.rvAuthorPostList.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(posts
+                .asSequence()
                 .filter { it.author == arguments?.authorFilter }
-                .sortedWith(compareBy { it.dateCompare }
-                )
+                .sortedWith(compareBy { it.dateCompare })
+                .toList()
             )
         }
     return binding.root
