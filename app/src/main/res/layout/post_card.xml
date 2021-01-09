@@ -26,7 +26,7 @@
 
         <TextView
             android:id="@+id/author"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
@@ -39,8 +39,30 @@
             tools:text="Author" />
 
         <TextView
+            android:id="@+id/tv_rating_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_spacing"
+            android:layout_marginEnd="@dimen/common_spacing"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="0" />
+
+        <ImageView
+            android:id="@+id/iv_icon_chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/common_spacing"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_rating_value"
+            app:srcCompat="@drawable/ic_bar_chart_24"/>
+
+
+        <TextView
             android:id="@+id/published"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
@@ -90,89 +112,55 @@
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="content" />
 
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/likes"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:checkable="true"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            style="@style/Widget.AppTheme.LikeCheckBox"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/barrierMid"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/share"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/barrierBottom"-->
-<!--            app:icon="@drawable/ic_like_24dp"-->
-<!--            tools:checked="@sample/posts.json/data/likedByMe"-->
-<!--            tools:text="@sample/posts.json/data/likes"/>-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_likes"
+            style="@style/Widget.AppTheme.FreeStyleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            app:icon="@drawable/ic_thumb_up_24"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="@dimen/common_spacing"
+            app:layout_constraintBottom_toTopOf="@+id/barrierBottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image_view"
+            tools:text="0" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_dislike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image_view"
+            android:layout_marginTop="@dimen/common_spacing"
+            app:layout_constraintStart_toEndOf="@id/btn_likes"
+            app:layout_constraintBottom_toTopOf="@+id/barrierBottom"
+            tools:text="0"
+            app:icon="@drawable/ic_thumb_down_24"
+            style="@style/Widget.AppTheme.FreeStyleButton"/>
 
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/share"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:checkable="true"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/barrierMid"-->
-<!--            app:layout_constraintStart_toEndOf="@id/likes"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/chat"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/barrierBottom"-->
-<!--            tools:text="@sample/posts.json/data/share"-->
-<!--            app:icon="@drawable/ic_outline_share_24"-->
-<!--            style="@style/Widget.AppTheme.FreeStyleButton"/>-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:checkable="true"
+            android:layout_marginTop="@dimen/common_spacing"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/barrierBottom"
+            tools:text="Поделиться"
+            android:textSize="12sp"
+            app:icon="@drawable/ic_share_option"
+            style="@style/Widget.AppTheme.FreeStyleButton"/>
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/chat"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/barrierMid"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/share"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/chatCount"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/barrierBottom"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            app:srcCompat="@drawable/ic_chat_bubble_24"-->
-<!--            android:contentDescription="@string/description_chats_item" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/chatCount"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="@dimen/info_elements_spacing"-->
-<!--            app:layout_constraintBaseline_toBaselineOf="@id/share"-->
-<!--            app:layout_constraintStart_toEndOf="@id/chat"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/barrierMid"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/view"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/barrierBottom"-->
-<!--            tools:text="@sample/posts.json/data/chat" />-->
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/view"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/chatCount"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/barrierMid"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/viewCount"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/barrierBottom"-->
-<!--            app:srcCompat="@drawable/ic_views_24"-->
-<!--            android:contentDescription="@string/description_view_item" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/viewCount"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="@dimen/info_elements_spacing"-->
-<!--            app:layout_constraintBaseline_toBaselineOf="@id/share"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/barrierMid"-->
-<!--            app:layout_constraintStart_toEndOf="@id/view"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            tools:text="@sample/posts.json/data/views"/>-->
-
-<!--        <androidx.constraintlayout.widget.Barrier-->
-<!--            android:id="@+id/barrierBottom"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:barrierDirection="bottom"-->
-<!--            app:constraint_referenced_ids="viewCount,view,chatCount,chat,share,likes" />-->
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrierBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="btn_likes, btn_dislike, btn_share" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

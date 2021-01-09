@@ -10,6 +10,7 @@ import java.util.*
 
 class PostRepositoryInMemoryImpl: IPostRepository {
     private var nextId = 1L
+    private var tempValue = 0
     private var posts = listOf(
         Post(
             id = nextId++,
@@ -80,6 +81,8 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             author = "Аноним",
             content = "Привет 9",
             datePublished = "04/01/2021 15:57",
+            likes = 23,
+            dislike = 45,
             pictureName = "",
             dateCompare = nextId
         ),
@@ -88,6 +91,8 @@ class PostRepositoryInMemoryImpl: IPostRepository {
             author = "Аноним",
             content = "Привет 10",
             datePublished = "04/01/2021 15:57",
+            likes = 123,
+            dislike = 45,
             pictureName = "",
             dateCompare = nextId
         )
@@ -97,17 +102,35 @@ class PostRepositoryInMemoryImpl: IPostRepository {
 
     private val data = MutableLiveData(posts)
 
-
-
-    override fun like() {
-        TODO("Not yet implemented")
-    }
-
-    override fun dislike() {
-        TODO("Not yet implemented")
-    }
-
     override fun getAll(): LiveData<List<Post>> = data
+
+    override fun like(id: Long) {
+        posts = posts.map {
+            if (it.id != id) {
+                it
+            } else {
+                tempValue = it.likes
+                tempValue++
+                it.copy(likes = tempValue)
+            }
+        }
+        data.value = posts
+    }
+
+    override fun dislike(id: Long) {
+        posts = posts.map {
+            if (it.id != id) {
+                it
+            } else {
+                tempValue = it.dislike
+                tempValue++
+                it.copy(dislike = tempValue)
+            }
+        }
+        data.value = posts
+    }
+
+
 
     override fun savePost(post: Post) {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH)
@@ -149,7 +172,7 @@ class PostRepositoryInMemoryImpl: IPostRepository {
         data.value = posts
     }
 
-    override fun share() {
+    override fun share(id: Long) {
         TODO("Not yet implemented")
     }
 

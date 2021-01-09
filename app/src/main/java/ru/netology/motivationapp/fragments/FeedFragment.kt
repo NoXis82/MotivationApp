@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -126,9 +127,13 @@ class FeedFragment : Fragment() {
                 pageItemLimit += pageItemLimit
                 binding.rvPostList.adapter = adapter
                 viewModel.data.observe(viewLifecycleOwner) { posts ->
-                    adapter.submitList(posts
+                    adapter.submitList(
+                        posts
                             .asSequence()
                             .sortedWith(compareBy { it.dateCompare })
+                            .sortedWith { post1, post2 ->
+                                (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
+                            }
                             .toList()
                             .takeLast(pageItemLimit)
                     )
@@ -137,11 +142,11 @@ class FeedFragment : Fragment() {
             } else {
                 adapter = PostsAdapter(object : IOnInteractionListener {
                     override fun onLike(post: Post) {
-                        TODO("Not yet implemented")
+                        viewModel.like(post.id)
                     }
 
                     override fun onDisLike(post: Post) {
-                        TODO("Not yet implemented")
+                        viewModel.dislike(post.id)
                     }
 
                     override fun onShare(post: Post) {
@@ -150,18 +155,22 @@ class FeedFragment : Fragment() {
 
                     override fun onPostAuthorClick(post: Post) {
                         findNavController().navigate(
-                                R.id.action_feedFragment_to_authorListFragment,
-                                Bundle().apply {
-                                    authorFilter = post.author
-                                }
+                            R.id.action_feedFragment_to_authorListFragment,
+                            Bundle().apply {
+                                authorFilter = post.author
+                            }
                         )
                     }
                 })
                 binding.rvPostList.adapter = adapter
                 viewModel.data.observe(viewLifecycleOwner) { posts ->
-                    adapter.submitList(posts
+                    adapter.submitList(
+                        posts
                             .asSequence()
                             .sortedWith(compareBy { it.dateCompare })
+                            .sortedWith { post1, post2 ->
+                                (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
+                            }
                             .toList()
                             .takeLast(pageItemLimit)
                     )
