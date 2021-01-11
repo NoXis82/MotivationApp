@@ -5,5 +5,6 @@
     <string name="text">Text</string>
     <string name="share_text">Поделиться</string>
     <string name="chooser_share_post">Выберите приложение: </string>
+    <string name="error_empty_post">Content can\'t be empty</string>
 
 </resources>

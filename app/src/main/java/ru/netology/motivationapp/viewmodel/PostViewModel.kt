@@ -47,5 +47,4 @@ class PostViewModel: ViewModel() {
     fun editPost(post: Post) {
         edited.value = post
     }
-
 }

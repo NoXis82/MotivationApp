@@ -1,7 +1,7 @@
 package ru.netology.motivationapp.dto
 
 data class Post(
-    var id: Long,
+    val id: Long,
     val author: String,
     val content: String,
     val datePublished: String,

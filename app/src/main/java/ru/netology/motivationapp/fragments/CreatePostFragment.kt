@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -74,26 +75,34 @@ class CreatePostFragment : Fragment() {
         binding.btnDeleteImage.setOnClickListener {
                 binding.viewLoadImage.setImageDrawable(null)
                 binding.frameImage.visibility = View.GONE
-            //удаление файла из Images
                 filename = ""
         }
 
         binding.btnSave.setOnClickListener {
-            val drawable = binding.viewLoadImage.drawable
-            if (drawable != null && filename.isNotEmpty()) {
-                val bitmap = drawable.toBitmap()
-                saveImageToExternal(bitmap)
+            with(binding.editContent) {
+                if (TextUtils.isEmpty(text)) {
+                    Toast.makeText(
+                            context,
+                            context.getString(R.string.error_empty_post),
+                            Toast.LENGTH_LONG
+                    ).show()
+                    return@setOnClickListener
+                }
+                val drawable = binding.viewLoadImage.drawable
+                if (drawable != null && filename.isNotEmpty()) {
+                    val bitmap = drawable.toBitmap()
+                    saveImageToExternal(bitmap)
+                }
+
+                viewModel.changeContent(
+                        binding.editQuery.text.toString(),
+                        binding.editContent.text.toString(),
+                        filename
+                )
+                viewModel.savePost()
+                AndroidUtils.hideKeyboard(requireView())
+                findNavController().navigateUp()
             }
-
-            viewModel.changeContent(
-                binding.editQuery.text.toString(),
-                binding.editContent.text.toString(),
-                filename
-            )
-            viewModel.savePost()
-            AndroidUtils.hideKeyboard(requireView())
-            findNavController().navigateUp()
-
         }
         return binding.root
     }
