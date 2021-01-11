@@ -172,8 +172,4 @@ class PostRepositoryInMemoryImpl: IPostRepository {
         data.value = posts
     }
 
-    override fun share(id: Long) {
-        TODO("Not yet implemented")
-    }
-
 }

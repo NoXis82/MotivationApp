@@ -12,6 +12,18 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.MotivationApp">
 
+    <provider
+        android:name="androidx.core.content.FileProvider"
+        android:grantUriPermissions="true"
+        android:exported="false"
+        android:authorities="${applicationId}">
+
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/file_provider_paths"/>
+    </provider>
+
+
     <activity android:name=".MainActivity">
 
         <nav-graph android:value="@navigation/nav_graph" />
@@ -20,6 +32,14 @@
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+
+        <intent-filter>
+            <action android:name="android.intent.action.SEND" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="text/plain" />
+            <data android:mimeType="image/*" />
+        </intent-filter>
+
     </activity>
 </application>
 </manifest>

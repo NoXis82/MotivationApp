@@ -99,7 +99,7 @@ class CreatePostFragment : Fragment() {
     }
 
     private fun saveImageToExternal(bitmap: Bitmap) {
-        val fileDir = File(context?.filesDir, "Images")
+        val fileDir = File(context?.filesDir, "images")
         fileDir.mkdir()
         val file = File(fileDir, filename)
         if (file.exists()) {
@@ -121,7 +121,7 @@ class CreatePostFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
             binding.viewLoadImage.setImageURI(data?.data)
             binding.frameImage.visibility = View.VISIBLE
-            filename = File(data?.data?.path.toString()).name + ".jpg"
+            filename = File(data?.data?.path.toString()).name + ".jpeg"
        }
     }
 

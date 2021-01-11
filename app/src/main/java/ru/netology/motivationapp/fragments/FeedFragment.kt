@@ -1,6 +1,7 @@
 package ru.netology.motivationapp.fragments
 
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -8,12 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ru.netology.motivationapp.BuildConfig
 import ru.netology.motivationapp.R
 import ru.netology.motivationapp.fragments.CreatePostFragment.Companion.author
 import ru.netology.motivationapp.fragments.CreatePostFragment.Companion.content
@@ -27,6 +29,8 @@ import ru.netology.motivationapp.swipecontroller.IOnSwipeControllerActions
 import ru.netology.motivationapp.swipecontroller.SwipeButton
 import ru.netology.motivationapp.swipecontroller.SwipeHelper
 import ru.netology.motivationapp.viewmodel.PostViewModel
+import java.io.File
+import java.io.FileNotFoundException
 
 
 class FeedFragment : Fragment() {
@@ -128,17 +132,17 @@ class FeedFragment : Fragment() {
                 binding.rvPostList.adapter = adapter
                 viewModel.data.observe(viewLifecycleOwner) { posts ->
                     adapter.submitList(
-                        posts
-                            .asSequence()
-                            .sortedWith(compareBy { it.dateCompare })
-                            .sortedWith { post1, post2 ->
-                                (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
-                            }
-                            .toList()
-                            .takeLast(pageItemLimit)
+                            posts
+                                    .asSequence()
+                                    .sortedWith(compareBy { it.dateCompare })
+                                    .sortedWith { post1, post2 ->
+                                        (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
+                                    }
+                                    .toList()
+                                    .takeLast(pageItemLimit)
                     )
                 }
-                binding.rvPostList.smoothScrollToPosition(pageItemLimit / 2)
+                binding.rvPostList.smoothScrollToPosition(0)
             } else {
                 adapter = PostsAdapter(object : IOnInteractionListener {
                     override fun onLike(post: Post) {
@@ -150,29 +154,58 @@ class FeedFragment : Fragment() {
                     }
 
                     override fun onShare(post: Post) {
-                        TODO("Not yet implemented")
+                        val intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, post.author + "\n" + post.content)
+                            type = "text/plain"
+                            if (post.pictureName != "") {
+                                try {
+                                    val fileDir = File(
+                                            binding.root.context?.filesDir,
+                                            "images")
+                                    fileDir.mkdir()
+                                    val file = File(fileDir.path, post.pictureName)
+                                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                    val uriImg = FileProvider.getUriForFile(
+                                            requireContext(),
+                                            BuildConfig.APPLICATION_ID,
+                                            file
+                                    )
+                                    putExtra(Intent.EXTRA_STREAM, uriImg)
+                                    type = "image/*"
+
+                                } catch (e: FileNotFoundException) {
+                                    e.printStackTrace()
+                                }
+                            }
+                        }
+                        val shareIntent = Intent.createChooser(
+                                intent,
+                                getString(R.string.chooser_share_post)
+                        )
+                        startActivity(shareIntent)
                     }
 
                     override fun onPostAuthorClick(post: Post) {
                         findNavController().navigate(
-                            R.id.action_feedFragment_to_authorListFragment,
-                            Bundle().apply {
-                                authorFilter = post.author
-                            }
+                                R.id.action_feedFragment_to_authorListFragment,
+                                Bundle().apply {
+                                    authorFilter = post.author
+                                }
                         )
                     }
                 })
                 binding.rvPostList.adapter = adapter
                 viewModel.data.observe(viewLifecycleOwner) { posts ->
                     adapter.submitList(
-                        posts
-                            .asSequence()
-                            .sortedWith(compareBy { it.dateCompare })
-                            .sortedWith { post1, post2 ->
-                                (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
-                            }
-                            .toList()
-                            .takeLast(pageItemLimit)
+                            posts
+                                    .asSequence()
+                                    .sortedWith(compareBy { it.dateCompare })
+                                    .sortedWith { post1, post2 ->
+                                        (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
+                                    }
+                                    .toList()
+                                    .takeLast(pageItemLimit)
                     )
                 }
                 binding.rvPostList.smoothScrollToPosition(adapter.itemCount)

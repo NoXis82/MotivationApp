@@ -61,7 +61,7 @@ class PostViewHolder(
             } else {
                 binding.ivImageView.visibility = View.VISIBLE
                 try {
-                    val fileDir = File(binding.root.context?.filesDir, "Images")
+                    val fileDir = File(binding.root.context?.filesDir, "images")
                     fileDir.mkdir()
                     val file = File(fileDir, post.pictureName)
                     val bitmap = BitmapFactory.decodeFile(file.toString())
@@ -87,6 +87,9 @@ class PostViewHolder(
                 onInteractionListener.onDisLike(post)
             }
 
+            binding.btnShare.setOnClickListener {
+                onInteractionListener.onShare(post)
+            }
 
         }
     }

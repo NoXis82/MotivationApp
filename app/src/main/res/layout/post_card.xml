@@ -146,14 +146,13 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:checkable="true"
+            style="@style/Widget.AppTheme.FreeStyleButton"
             android:layout_marginTop="@dimen/common_spacing"
+            android:text="@string/share_text"
             app:layout_constraintTop_toBottomOf="@+id/iv_image_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/barrierBottom"
-            tools:text="Поделиться"
-            android:textSize="12sp"
-            app:icon="@drawable/ic_share_option"
-            style="@style/Widget.AppTheme.FreeStyleButton"/>
+            app:icon="@drawable/ic_share_option"/>
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrierBottom"

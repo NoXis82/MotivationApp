@@ -9,6 +9,5 @@ interface IPostRepository {
     fun getAll(): LiveData<List<Post>>
     fun savePost(post: Post)
     fun removePost(id: Long)
-    fun share(id: Long)
 
 }
