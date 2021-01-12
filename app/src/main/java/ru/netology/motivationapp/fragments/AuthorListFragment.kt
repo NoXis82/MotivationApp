@@ -11,6 +11,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.post_card.*
 import ru.netology.motivationapp.BuildConfig
 import ru.netology.motivationapp.R
 import ru.netology.motivationapp.adapter.IOnInteractionListener
@@ -139,6 +140,7 @@ class AuthorListFragment : Fragment() {
             adapter.submitList(
                     posts
                             .asSequence()
+                            .filter { it.author == arguments?.authorFilter }
                             .sortedWith(compareBy { it.dateCompare })
                             .sortedWith { post1, post2 ->
                                 (post2.likes - post2.dislike) - (post1.likes - post1.dislike)

@@ -46,7 +46,7 @@ class CreatePostFragment : Fragment() {
         if (arguments?.pictureName?.isNotEmpty() == true) {
                 binding.frameImage.visibility = View.VISIBLE
                 try {
-                    val fileDir = File(binding.root.context?.filesDir, "Images")
+                    val fileDir = File(binding.root.context?.filesDir, "images")
                     fileDir.mkdir()
                     val file = File(fileDir, arguments?.pictureName.toString())
                     val bitmap = BitmapFactory.decodeFile(file.toString())

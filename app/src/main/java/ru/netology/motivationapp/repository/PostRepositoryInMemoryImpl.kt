@@ -139,7 +139,7 @@ class PostRepositoryInMemoryImpl: IPostRepository {
            posts = listOf(
                post.copy(
                    id = nextId++,
-                    author = post.author,
+                   author = post.author,
                    content = post.content,
                    datePublished = currentDate,
                    pictureName = post.pictureName,

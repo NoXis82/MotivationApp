@@ -47,8 +47,8 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.datePublished
             content.text = post.content
-            btnLikes.text = post.likes.toString()
-            btnDislike.text = post.dislike.toString()
+            btnLikes.text = formatCountToStr(post.likes)
+            btnDislike.text = formatCountToStr(post.dislike)
             if ((post.likes - post.dislike) >= 0) {
                 tvRatingValue.setTextColor(Color.GREEN)
             } else {
@@ -104,5 +104,27 @@ class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
 
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem == newItem
+    }
+}
+
+private fun formatCountToStr(value: Int): String {
+    return when (value / 1000) {
+        0 -> "$value"
+        in 1..9 -> {
+            val str = "%.1f".format(value / 1000.0)
+                .dropLastWhile { it == '0' }
+                .dropLastWhile { it == '.' }
+            "${str}K"
+        }
+        in 10..999 -> {
+            val res = value / 1000
+            "${res}K"
+        }
+        else -> {
+            val str = "%.1f".format(value / 1000000.0)
+                .dropLastWhile { it == '0' }
+                .dropLastWhile { it == '.' }
+            "${str}М"
+        }
     }
 }

@@ -142,7 +142,7 @@ class FeedFragment : Fragment() {
                                     .takeLast(pageItemLimit)
                     )
                 }
-                binding.rvPostList.smoothScrollToPosition(0)
+                //binding.rvPostList.smoothScrollToPosition(adapter.itemCount)
             } else {
                 adapter = PostsAdapter(object : IOnInteractionListener {
                     override fun onLike(post: Post) {
@@ -208,8 +208,10 @@ class FeedFragment : Fragment() {
                                     .takeLast(pageItemLimit)
                     )
                 }
+
                 binding.rvPostList.smoothScrollToPosition(adapter.itemCount)
             }
+
             binding.pbLoadList.visibility = View.GONE
         }, 1000)
     }
