@@ -48,7 +48,6 @@ class FeedFragment : Fragment() {
     ): View? {
         binding = FeedFragmentBinding.inflate(layoutInflater)
         getPageItem()
-
         object : SwipeHelper(requireContext(), binding.rvPostList, 200) {
             override fun instantiateSwipeButtons(
                     viewHolder: RecyclerView.ViewHolder,
@@ -57,8 +56,8 @@ class FeedFragment : Fragment() {
                 buffer.add(
                         SwipeButton(
                                 requireContext(),
-                                "Delete",
-                                0,
+                                "Удалить",
+                                R.drawable.ic_delete_24,
                                 Color.parseColor("#FF3C30"),
                                 object : IOnSwipeControllerActions {
                                     override fun onClick(pos: Int) {
@@ -73,8 +72,8 @@ class FeedFragment : Fragment() {
                 buffer.add(
                         SwipeButton(
                                 requireContext(),
-                                "Edit",
-                                0,
+                                "Редактировать",
+                                R.drawable.ic_edit_24,
                                 Color.parseColor("#FF9502"),
                                 object : IOnSwipeControllerActions {
                                     override fun onClick(pos: Int) {
@@ -90,6 +89,8 @@ class FeedFragment : Fragment() {
                                 }
                         )
                 )
+
+
             }
         }
 
@@ -142,9 +143,9 @@ class FeedFragment : Fragment() {
                                     .takeLast(pageItemLimit)
                     )
                 }
-                //binding.rvPostList.smoothScrollToPosition(adapter.itemCount)
             } else {
                 adapter = PostsAdapter(object : IOnInteractionListener {
+
                     override fun onLike(post: Post) {
                         viewModel.like(post.id)
                     }
@@ -208,10 +209,7 @@ class FeedFragment : Fragment() {
                                     .takeLast(pageItemLimit)
                     )
                 }
-
-                binding.rvPostList.smoothScrollToPosition(adapter.itemCount)
             }
-
             binding.pbLoadList.visibility = View.GONE
         }, 1000)
     }
