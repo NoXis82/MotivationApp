@@ -1,12 +1,15 @@
 package ru.netology.motivationapp.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.netology.motivationapp.db.AppDb
 import ru.netology.motivationapp.dto.Post
 import ru.netology.motivationapp.repository.*
 
 
-class PostViewModel: ViewModel() {
+class PostViewModel(application: Application): AndroidViewModel(application) {
 
     private val empty = Post(
         id = 0,
@@ -16,8 +19,11 @@ class PostViewModel: ViewModel() {
         pictureName = "",
         dateCompare = 0
     )
+    private val repository: IPostRepository = PostRepositorySQLite(
+        AppDb.getInstance(application)
+            .postDao()
+    )
 
-    private val repository: IPostRepository = PostRepositoryInMemoryImpl()
     val data = repository.getAll()
     private val edited = MutableLiveData(empty)
     fun remove(id: Long) = repository.removePost(id)
@@ -47,5 +53,4 @@ class PostViewModel: ViewModel() {
     fun editPost(post: Post) {
         edited.value = post
     }
-
 }

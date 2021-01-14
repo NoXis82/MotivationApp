@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MotivationApp</string>
+    <string name="description_post_author_avatar">Аватарка автора</string>
+    <string name="hello_blank_fragment">Привет</string>
+    <string name="text">Текст</string>
+    <string name="share_text">Поделиться</string>
+    <string name="chooser_share_post">Выберите приложение: </string>
+    <string name="error_empty_post">Поле не может быть пустым</string>
+    <string name="error_save_image">Ошибка сохранения картинки!</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
+    <string name="label_feed_fragment">Список мотиваций</string>
+    <string name="label_fragment_create">Пост создать/редактировать</string>
+    <string name="label_fragment_author">Посты автора</string>
+
+</resources>

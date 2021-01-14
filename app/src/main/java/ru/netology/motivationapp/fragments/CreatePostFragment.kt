@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +36,7 @@ class CreatePostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCreatePostBinding.inflate(layoutInflater)
         arguments?.author.let(binding.editQuery::setText)
         arguments?.content.let(binding.editContent::setText)
@@ -45,7 +46,7 @@ class CreatePostFragment : Fragment() {
         if (arguments?.pictureName?.isNotEmpty() == true) {
                 binding.frameImage.visibility = View.VISIBLE
                 try {
-                    val fileDir = File(binding.root.context?.filesDir, "Images")
+                    val fileDir = File(binding.root.context?.filesDir, "images")
                     fileDir.mkdir()
                     val file = File(fileDir, arguments?.pictureName.toString())
                     val bitmap = BitmapFactory.decodeFile(file.toString())
@@ -74,26 +75,34 @@ class CreatePostFragment : Fragment() {
         binding.btnDeleteImage.setOnClickListener {
                 binding.viewLoadImage.setImageDrawable(null)
                 binding.frameImage.visibility = View.GONE
-            //удаление файла из Images
                 filename = ""
         }
 
         binding.btnSave.setOnClickListener {
-            val drawable = binding.viewLoadImage.drawable
-            if (drawable != null && filename.isNotEmpty()) {
-                val bitmap = drawable.toBitmap()
-                saveImageToExternal(bitmap)
+            with(binding.editContent) {
+                if (TextUtils.isEmpty(text)) {
+                    Toast.makeText(
+                            context,
+                            context.getString(R.string.error_empty_post),
+                            Toast.LENGTH_LONG
+                    ).show()
+                    return@setOnClickListener
+                }
+                val drawable = binding.viewLoadImage.drawable
+                if (drawable != null && filename.isNotEmpty()) {
+                    val bitmap = drawable.toBitmap()
+                    saveImageToExternal(bitmap)
+                }
+
+                viewModel.changeContent(
+                        binding.editQuery.text.toString(),
+                        binding.editContent.text.toString(),
+                        filename
+                )
+                viewModel.savePost()
+                AndroidUtils.hideKeyboard(requireView())
+                findNavController().navigateUp()
             }
-
-            viewModel.changeContent(
-                binding.editQuery.text.toString(),
-                binding.editContent.text.toString(),
-                filename
-            )
-            viewModel.savePost()
-            AndroidUtils.hideKeyboard(requireView())
-            findNavController().navigateUp()
-
         }
         return binding.root
     }
@@ -112,7 +121,7 @@ class CreatePostFragment : Fragment() {
             streamOut.close()
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(context, "Error save image!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.error_save_image), Toast.LENGTH_SHORT).show()
         }
     }
 

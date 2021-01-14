@@ -42,16 +42,19 @@ class SwipeButton(
   val cWidth = rectF.width()
   p.textAlign = Paint.Align.LEFT
   p.getTextBounds(text, 0, text.length, rect)
-  var x = 0f
-  var y = 0f
+  val x = cWidth / 2f - rect.width() / 2f - rect.left.toFloat()
+  val y = cHeight / 2f + rect.height() / 2f - rect.bottom.toFloat()
   if (imageResId == 0) {
-   x = cWidth / 2f - rect.width() / 2f - rect.left.toFloat()
-   y = cHeight / 2f + rect.height() / 2f - rect.bottom.toFloat()
    c.drawText(text, rectF.left + x, rectF.top + y, p)
   } else {
    val d = ContextCompat.getDrawable(context, imageResId)
    val bitmap = drawableToBitmap(d)
-   c.drawBitmap(bitmap, (rectF.left + rectF.right) / 2, (rectF.top + rectF.bottom) / 2, p)
+   c.drawText(text, rectF.left + x, rectF.top + y + 10f, p)
+   c.drawBitmap(bitmap,
+           (rectF.left + rectF.right) / 2 - bitmap.width / 2,
+           (rectF.top + rectF.bottom) / 2 - bitmap.height,
+           p
+   )
   }
   clickRegion = rectF
   this.pos = pos
