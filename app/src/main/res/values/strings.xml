@@ -3,8 +3,14 @@
     <string name="description_post_author_avatar">Post author avatar</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text">Text</string>
-    <string name="share_text">Поделиться</string>
-    <string name="chooser_share_post">Выберите приложение: </string>
+    <string name="share_text">Share</string>
+    <string name="chooser_share_post">Choose app: </string>
     <string name="error_empty_post">Content can\'t be empty</string>
+    <string name="error_save_image">Error save image!</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="label_feed_fragment">Motivation list</string>
+    <string name="label_fragment_create">Post create/edit</string>
+    <string name="label_fragment_author">Posts author</string>
 
 </resources>

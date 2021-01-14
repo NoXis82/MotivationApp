@@ -45,10 +45,11 @@ class FeedFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FeedFragmentBinding.inflate(layoutInflater)
         getPageItem()
         object : SwipeHelper(requireContext(), binding.rvPostList, 200) {
+
             override fun instantiateSwipeButtons(
                     viewHolder: RecyclerView.ViewHolder,
                     buffer: MutableList<SwipeButton>
@@ -56,7 +57,7 @@ class FeedFragment : Fragment() {
                 buffer.add(
                         SwipeButton(
                                 requireContext(),
-                                "Удалить",
+                                getString(R.string.delete),
                                 R.drawable.ic_delete_24,
                                 Color.parseColor("#FF3C30"),
                                 object : IOnSwipeControllerActions {
@@ -72,7 +73,7 @@ class FeedFragment : Fragment() {
                 buffer.add(
                         SwipeButton(
                                 requireContext(),
-                                "Редактировать",
+                                getString(R.string.edit),
                                 R.drawable.ic_edit_24,
                                 Color.parseColor("#FF9502"),
                                 object : IOnSwipeControllerActions {
@@ -109,15 +110,17 @@ class FeedFragment : Fragment() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val visibleItemCount = (recyclerView.layoutManager as LinearLayoutManager)
-                        .childCount
-                val firstVisibleItem = (recyclerView.layoutManager as LinearLayoutManager)
-                        .findFirstVisibleItemPosition()
-                val totalItemCount = (recyclerView.layoutManager as LinearLayoutManager)
-                        .itemCount
-                if (isLoading && (visibleItemCount + firstVisibleItem >= totalItemCount)) {
-                    isLoading = false
-                    getPageItem()
+                if (dy < 0) {
+                    val visibleItemCount = (recyclerView.layoutManager as LinearLayoutManager)
+                            .childCount
+                    val lastVisibleItem = (recyclerView.layoutManager as LinearLayoutManager)
+                            .findLastVisibleItemPosition()
+                    val totalItemCount = (recyclerView.layoutManager as LinearLayoutManager)
+                            .itemCount
+                    if (isLoading && (visibleItemCount + lastVisibleItem == totalItemCount)) {
+                        isLoading = false
+                        getPageItem()
+                    }
                 }
             }
         })
@@ -129,7 +132,9 @@ class FeedFragment : Fragment() {
         binding.pbLoadList.visibility = View.VISIBLE
         Handler().postDelayed({
             if (this::adapter.isInitialized) {
-                pageItemLimit += pageItemLimit
+                if (adapter.itemCount == pageItemLimit) {
+                    pageItemLimit += pageItemLimit
+                }
                 binding.rvPostList.adapter = adapter
                 viewModel.data.observe(viewLifecycleOwner) { posts ->
                     adapter.submitList(

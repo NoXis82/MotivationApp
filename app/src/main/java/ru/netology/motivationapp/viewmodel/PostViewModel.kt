@@ -19,8 +19,6 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
         pictureName = "",
         dateCompare = 0
     )
-
-    //private val repository: IPostRepository = PostRepositoryInMemoryImpl()
     private val repository: IPostRepository = PostRepositorySQLite(
         AppDb.getInstance(application)
             .postDao()

@@ -11,7 +11,6 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.post_card.*
 import ru.netology.motivationapp.BuildConfig
 import ru.netology.motivationapp.R
 import ru.netology.motivationapp.adapter.IOnInteractionListener
@@ -39,7 +38,7 @@ class AuthorListFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentAuthorListBinding.inflate(layoutInflater)
         val adapter = PostsAdapter(object : IOnInteractionListener {
             override fun onLike(post: Post) {

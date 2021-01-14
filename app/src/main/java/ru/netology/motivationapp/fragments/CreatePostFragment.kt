@@ -36,7 +36,7 @@ class CreatePostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCreatePostBinding.inflate(layoutInflater)
         arguments?.author.let(binding.editQuery::setText)
         arguments?.content.let(binding.editContent::setText)
@@ -121,7 +121,7 @@ class CreatePostFragment : Fragment() {
             streamOut.close()
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(context, "Error save image!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.error_save_image), Toast.LENGTH_SHORT).show()
         }
     }
 
