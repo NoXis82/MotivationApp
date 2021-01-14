@@ -36,6 +36,7 @@ import java.io.FileNotFoundException
 class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
     private var pageItemLimit = 20
+    private val LIMIT_ITEMS_LIST = 20
     private var isLoading = false
     lateinit var adapter: PostsAdapter
     lateinit var binding: FeedFragmentBinding
@@ -133,7 +134,7 @@ class FeedFragment : Fragment() {
         Handler().postDelayed({
             if (this::adapter.isInitialized) {
                 if (adapter.itemCount == pageItemLimit) {
-                    pageItemLimit += pageItemLimit
+                    pageItemLimit += LIMIT_ITEMS_LIST
                 }
                 binding.rvPostList.adapter = adapter
                 viewModel.data.observe(viewLifecycleOwner) { posts ->
