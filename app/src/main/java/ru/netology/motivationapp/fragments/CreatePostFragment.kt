@@ -22,46 +22,49 @@ import ru.netology.motivationapp.viewmodel.PostViewModel
 import java.io.*
 
 class CreatePostFragment : Fragment() {
-
     private val REQUEST_CODE = 100
     private lateinit var binding: FragmentCreatePostBinding
     private var filename: String = ""
 
-    companion object {
-        var Bundle.author: String? by StringArg
-        var Bundle.content: String? by StringArg
-        var Bundle.pictureName: String? by StringArg
-    }
+//    companion object {
+//        var Bundle.author: String? by StringArg
+//        var Bundle.content: String? by StringArg
+//        var Bundle.pictureName: String? by StringArg
+//    }
+
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = FragmentCreatePostBinding.inflate(layoutInflater)
-        arguments?.author.let(binding.editQuery::setText)
-        arguments?.content.let(binding.editContent::setText)
-        if (arguments?.pictureName?.isNotEmpty() == true) {
-            filename = arguments?.pictureName.toString()
-        }
-        if (arguments?.pictureName?.isNotEmpty() == true) {
-                binding.frameImage.visibility = View.VISIBLE
-                try {
-                    val fileDir = File(binding.root.context?.filesDir, "images")
-                    fileDir.mkdir()
-                    val file = File(fileDir, arguments?.pictureName.toString())
-                    val bitmap = BitmapFactory.decodeFile(file.toString())
-                    binding.viewLoadImage.setImageBitmap(bitmap)
-                } catch (e: FileNotFoundException) {
-                    e.printStackTrace()
-                }
-            } else {
-                binding.frameImage.visibility = View.GONE
-            }
+        val author = arguments?.let { CreatePostFragmentArgs.fromBundle(it).author }
+        val content = arguments?.let { CreatePostFragmentArgs.fromBundle(it).content }
+        val pictureName = arguments?.let { CreatePostFragmentArgs.fromBundle(it).pictureName }
+        binding.editQuery.setText(author)
+        binding.editContent.setText(content)
 
-       binding.bottomAppBar.apply {
-            setOnMenuItemClickListener {
-                item ->
-                when(item.itemId) {
+//        if (arguments?.pictureName?.isNotEmpty() == true) {
+//            filename = arguments?.pictureName.toString()
+//        }
+        if (pictureName?.isNotEmpty() == true) {
+            filename = pictureName//.toString()
+            binding.frameImage.visibility = View.VISIBLE
+            try {
+                val fileDir = File(binding.root.context?.filesDir, "images")
+                fileDir.mkdir()
+                val file = File(fileDir, pictureName)
+                val bitmap = BitmapFactory.decodeFile(file.toString())
+                binding.viewLoadImage.setImageBitmap(bitmap)
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            }
+        } else {
+            binding.frameImage.visibility = View.GONE
+        }
+        binding.bottomAppBar.apply {
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
                     R.id.app_bar_add_image -> {
                         val intent = Intent(Intent.ACTION_PICK)
                         intent.type = "image/*"
@@ -73,12 +76,12 @@ class CreatePostFragment : Fragment() {
             }
         }
         binding.btnDeleteImage.setOnClickListener {
-                binding.viewLoadImage.setImageDrawable(null)
-                binding.frameImage.visibility = View.GONE
-                filename = ""
+            binding.viewLoadImage.setImageDrawable(null)
+            binding.frameImage.visibility = View.GONE
+            filename = ""
         }
 
-        binding.btnSave.setOnClickListener {
+        binding.fabBtnSave.setOnClickListener {
             with(binding.editContent) {
                 if (TextUtils.isEmpty(text)) {
                     Toast.makeText(
@@ -131,8 +134,6 @@ class CreatePostFragment : Fragment() {
             binding.viewLoadImage.setImageURI(data?.data)
             binding.frameImage.visibility = View.VISIBLE
             filename = File(data?.data?.path.toString()).name + ".jpeg"
-       }
+        }
     }
-
-
 }

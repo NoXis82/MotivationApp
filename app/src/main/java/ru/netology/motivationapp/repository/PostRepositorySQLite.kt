@@ -8,8 +8,8 @@ import ru.netology.motivationapp.dto.PostEntity
 import ru.netology.motivationapp.dto.toPost
 
 class PostRepositorySQLite(
-    private val dao: PostDao
-) : IPostRepository{
+        private val dao: PostDao
+) : IPostRepository {
     override fun like(id: Long) {
         dao.likeById(id)
     }

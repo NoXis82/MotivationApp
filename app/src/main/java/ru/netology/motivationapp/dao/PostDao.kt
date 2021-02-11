@@ -24,23 +24,22 @@ interface PostDao {
         WHERE id = :id"""
     )
     fun updateContentById(id: Long, author: String, content: String, pictureName: String)
-
     fun save(post: PostEntity) =
-        if (post.id == 0L) {
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH)
-            val currentDate = dateFormat.format(Date())
-            insert(
-                post.copy(
-                    author = post.author,
-                    content = post.content,
-                    datePublished = currentDate,
-                    pictureName = post.pictureName,
-                    dateCompare = Date().time
+            if (post.id == 0L) {
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH)
+                val currentDate = dateFormat.format(Date())
+                insert(
+                        post.copy(
+                                author = post.author,
+                                content = post.content,
+                                datePublished = currentDate,
+                                pictureName = post.pictureName,
+                                dateCompare = Date().time
+                        )
                 )
-            )
-        } else {
-            updateContentById(post.id, post.author, post.content, post.pictureName)
-        }
+            } else {
+                updateContentById(post.id, post.author, post.content, post.pictureName)
+            }
 
     @Query("""UPDATE PostEntity SET likes = likes + 1 WHERE id = :id""")
     fun likeById(id: Long)

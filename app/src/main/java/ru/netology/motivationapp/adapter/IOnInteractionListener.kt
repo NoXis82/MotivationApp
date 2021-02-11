@@ -7,5 +7,4 @@ interface IOnInteractionListener {
     fun onDisLike(post: Post)
     fun onShare(post: Post)
     fun onPostAuthorClick(post: Post)
-
 }

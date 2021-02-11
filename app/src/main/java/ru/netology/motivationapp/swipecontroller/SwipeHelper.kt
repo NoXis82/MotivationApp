@@ -18,9 +18,7 @@ abstract class SwipeHelper(
         context: Context,
         private val recyclerView: RecyclerView,
         internal val buttonWidth: Int
-
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
     private var buttonsList: MutableList<SwipeButton>? = null
     private var swipedPos = -1
     private var swipeThreshold = 0.5f
@@ -36,7 +34,6 @@ abstract class SwipeHelper(
             return true
         }
     }
-
     private val onTouchListener = View.OnTouchListener { v, event ->
         if (swipedPos < 0) {
             return@OnTouchListener false
@@ -201,6 +198,4 @@ abstract class SwipeHelper(
             right = left
         }
     }
-
-
 }

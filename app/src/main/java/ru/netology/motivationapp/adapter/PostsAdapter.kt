@@ -9,23 +9,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.netology.motivationapp.R
 import ru.netology.motivationapp.databinding.PostCardBinding
 import ru.netology.motivationapp.dto.*
 import java.io.File
 import java.io.FileNotFoundException
 
 class PostsAdapter(
-
-    private val onInteractionListener: IOnInteractionListener
+        private val onInteractionListener: IOnInteractionListener
 ) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val postView = PostCardBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+                LayoutInflater.from(parent.context),
+                parent,
+                false
         )
         return PostViewHolder(postView, onInteractionListener)
     }
@@ -34,19 +30,17 @@ class PostsAdapter(
         val post = getItem(position)
         holder.bind(post)
     }
-
 }
 
 class PostViewHolder(
-    private val binding: PostCardBinding,
-    private val onInteractionListener: IOnInteractionListener
+        private val binding: PostCardBinding,
+        private val onInteractionListener: IOnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
-
     fun bind(post: Post) {
         binding.apply {
-            author.text = post.author
-            published.text = post.datePublished
-            content.text = post.content
+            tvAuthor.text = post.author
+            tvPublished.text = post.datePublished
+            tvContent.text = post.content
             btnLikes.text = formatCountToStr(post.likes)
             btnDislike.text = formatCountToStr(post.dislike)
             if ((post.likes - post.dislike) >= 0) {
@@ -55,49 +49,40 @@ class PostViewHolder(
                 tvRatingValue.setTextColor(Color.RED)
             }
             tvRatingValue.text = (post.likes - post.dislike).toString()
-
             if (post.pictureName == "") {
-                binding.ivImageView.visibility = View.GONE
+                ivImageView.visibility = View.GONE
             } else {
-                binding.ivImageView.visibility = View.VISIBLE
+                ivImageView.visibility = View.VISIBLE
                 try {
-                    val fileDir = File(binding.root.context?.filesDir, "images")
+                    val fileDir = File(root.context?.filesDir, "images")
                     fileDir.mkdir()
                     val file = File(fileDir, post.pictureName)
                     val bitmap = BitmapFactory.decodeFile(file.toString())
-                    binding.ivImageView.setImageBitmap(bitmap)
+                    ivImageView.setImageBitmap(bitmap)
                 } catch (e: FileNotFoundException) {
                     e.printStackTrace()
                 }
             }
-
-            binding.author.setOnClickListener {
+            tvAuthor.setOnClickListener {
                 onInteractionListener.onPostAuthorClick(post)
             }
-
-            binding.avatar.setOnClickListener {
+            ivAvatar.setOnClickListener {
                 onInteractionListener.onPostAuthorClick(post)
             }
-
-            binding.btnLikes.setOnClickListener {
+            btnLikes.setOnClickListener {
                 onInteractionListener.onLike(post)
             }
-
-            binding.btnDislike.setOnClickListener {
+            btnDislike.setOnClickListener {
                 onInteractionListener.onDisLike(post)
             }
-
-            binding.btnShare.setOnClickListener {
+            btnShare.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
-
         }
     }
 }
 
-
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
-
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem.id == newItem.id
     }
@@ -112,8 +97,8 @@ private fun formatCountToStr(value: Int): String {
         0 -> "$value"
         in 1..9 -> {
             val str = "%.1f".format(value / 1000.0)
-                .dropLastWhile { it == '0' }
-                .dropLastWhile { it == '.' }
+                    .dropLastWhile { it == '0' }
+                    .dropLastWhile { it == '.' }
             "${str}K"
         }
         in 10..999 -> {
@@ -122,8 +107,8 @@ private fun formatCountToStr(value: Int): String {
         }
         else -> {
             val str = "%.1f".format(value / 1000000.0)
-                .dropLastWhile { it == '0' }
-                .dropLastWhile { it == '.' }
+                    .dropLastWhile { it == '0' }
+                    .dropLastWhile { it == '.' }
             "${str}М"
         }
     }

@@ -14,7 +14,6 @@ abstract class AppDb : RoomDatabase() {
     companion object {
         @Volatile
         private var instance: AppDb? = null
-
         fun getInstance(context: Context): AppDb {
             return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also { instance = it }
@@ -22,8 +21,8 @@ abstract class AppDb : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(context, AppDb::class.java, "motivation_app.db")
-                .allowMainThreadQueries()
-                .build()
+                Room.databaseBuilder(context, AppDb::class.java, "motivation_app.db")
+                        .allowMainThreadQueries()
+                        .build()
     }
 }

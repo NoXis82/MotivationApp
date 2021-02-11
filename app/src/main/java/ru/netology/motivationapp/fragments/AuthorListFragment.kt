@@ -86,7 +86,6 @@ class AuthorListFragment : Fragment() {
 
             }
         })
-
         object : SwipeHelper(requireContext(), binding.rvAuthorPostList, 200) {
             override fun instantiateSwipeButtons(
                     viewHolder: RecyclerView.ViewHolder,
@@ -133,7 +132,6 @@ class AuthorListFragment : Fragment() {
             }
 
         }
-
         binding.rvAuthorPostList.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(
