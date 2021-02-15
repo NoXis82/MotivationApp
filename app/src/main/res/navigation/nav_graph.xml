@@ -30,7 +30,11 @@
             app:enterAnim="@anim/from_left"
             app:exitAnim="@anim/to_right"
             app:popEnterAnim="@anim/from_right"
-            app:popExitAnim="@anim/to_left" />
+            app:popExitAnim="@anim/to_left" >
+            <argument
+                android:name="authorFilter"
+                android:defaultValue=" " />
+        </action>
 
     </fragment>
 
@@ -41,19 +45,26 @@
         tools:layout="@layout/fragment_create_post">
         <argument
             android:name="author"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue=" " />
         <argument
             android:name="content"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue=" " />
         <argument
             android:name="pictureName"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue=" " />
     </fragment>
     <fragment
         android:id="@+id/authorListFragment"
         android:name="ru.netology.motivationapp.fragments.AuthorListFragment"
         android:label="@string/label_fragment_author"
         tools:layout="@layout/fragment_author_list" >
+        <argument
+            android:name="authorFilter"
+            app:argType="string"
+            android:defaultValue=" " />
         <action
             android:id="@+id/action_authorListFragment_to_createPostFragment"
             app:destination="@id/createPostFragment"
@@ -61,5 +72,6 @@
             app:exitAnim="@anim/to_right"
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left"/>
+
     </fragment>
 </navigation>

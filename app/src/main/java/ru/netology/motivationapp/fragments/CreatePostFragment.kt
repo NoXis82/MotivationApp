@@ -17,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import ru.netology.motivationapp.R
 import ru.netology.motivationapp.databinding.FragmentCreatePostBinding
 import ru.netology.motivationapp.utils.AndroidUtils
-import ru.netology.motivationapp.utils.StringArg
 import ru.netology.motivationapp.viewmodel.PostViewModel
 import java.io.*
 
@@ -25,30 +24,19 @@ class CreatePostFragment : Fragment() {
     private val REQUEST_CODE = 100
     private lateinit var binding: FragmentCreatePostBinding
     private var filename: String = ""
-
-//    companion object {
-//        var Bundle.author: String? by StringArg
-//        var Bundle.content: String? by StringArg
-//        var Bundle.pictureName: String? by StringArg
-//    }
-
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
         binding = FragmentCreatePostBinding.inflate(layoutInflater)
-        val author = arguments?.let { CreatePostFragmentArgs.fromBundle(it).author }
-        val content = arguments?.let { CreatePostFragmentArgs.fromBundle(it).content }
-        val pictureName = arguments?.let { CreatePostFragmentArgs.fromBundle(it).pictureName }
+        val author = arguments?.let { CreatePostFragmentArgs.fromBundle(it).author.trim() }
+        val content = arguments?.let { CreatePostFragmentArgs.fromBundle(it).content.trim() }
+        val pictureName = arguments?.let { CreatePostFragmentArgs.fromBundle(it).pictureName.trim() }
         binding.editQuery.setText(author)
         binding.editContent.setText(content)
-
-//        if (arguments?.pictureName?.isNotEmpty() == true) {
-//            filename = arguments?.pictureName.toString()
-//        }
         if (pictureName?.isNotEmpty() == true) {
-            filename = pictureName//.toString()
+            filename = pictureName
             binding.frameImage.visibility = View.VISIBLE
             try {
                 val fileDir = File(binding.root.context?.filesDir, "images")

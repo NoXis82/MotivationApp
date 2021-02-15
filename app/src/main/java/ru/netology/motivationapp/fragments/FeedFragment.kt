@@ -8,16 +8,13 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.motivationapp.BuildConfig
 import ru.netology.motivationapp.R
-import ru.netology.motivationapp.fragments.AuthorListFragment.Companion.authorFilter
 import ru.netology.motivationapp.adapter.IOnInteractionListener
 import ru.netology.motivationapp.adapter.PostsAdapter
 import ru.netology.motivationapp.databinding.FeedFragmentBinding
@@ -38,52 +35,52 @@ class FeedFragment : Fragment() {
     lateinit var adapter: PostsAdapter
     lateinit var binding: FeedFragmentBinding
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FeedFragmentBinding.inflate(layoutInflater)
         getPageItem()
         object : SwipeHelper(requireContext(), binding.rvPostList, 200) {
             override fun instantiateSwipeButtons(
-                    viewHolder: RecyclerView.ViewHolder,
-                    buffer: MutableList<SwipeButton>
+                viewHolder: RecyclerView.ViewHolder,
+                buffer: MutableList<SwipeButton>
             ) {
                 buffer.add(
-                        SwipeButton(
-                                requireContext(),
-                                getString(R.string.delete),
-                                R.drawable.ic_delete_24,
-                                Color.parseColor("#FF3C30"),
-                                object : IOnSwipeControllerActions {
-                                    override fun onClick(pos: Int) {
-                                        viewModel.remove(adapter.currentList[pos].id)
-                                        adapter.notifyItemRemoved(pos)
-                                        adapter.notifyItemRangeChanged(pos, adapter.itemCount)
-                                    }
+                    SwipeButton(
+                        requireContext(),
+                        getString(R.string.delete),
+                        R.drawable.ic_delete_24,
+                        Color.parseColor("#FF3C30"),
+                        object : IOnSwipeControllerActions {
+                            override fun onClick(pos: Int) {
+                                viewModel.remove(adapter.currentList[pos].id)
+                                adapter.notifyItemRemoved(pos)
+                                adapter.notifyItemRangeChanged(pos, adapter.itemCount)
+                            }
 
-                                }
-                        )
+                        }
+                    )
                 )
                 buffer.add(
-                        SwipeButton(
-                                requireContext(),
-                                getString(R.string.edit),
-                                R.drawable.ic_edit_24,
-                                Color.parseColor("#FF9502"),
-                                object : IOnSwipeControllerActions {
-                                    override fun onClick(pos: Int) {
-                                        viewModel.editPost(adapter.currentList[pos])
-                                        val action = FeedFragmentDirections
-                                                .actionFeedFragmentToCreatePostFragment(
-                                                        author = adapter.currentList[pos].author,
-                                                        content = adapter.currentList[pos].content,
-                                                        pictureName = adapter.currentList[pos].pictureName
-                                                )
-                                        findNavController().navigate(action)
-                                    }
-                                }
-                        )
+                    SwipeButton(
+                        requireContext(),
+                        getString(R.string.edit),
+                        R.drawable.ic_edit_24,
+                        Color.parseColor("#FF9502"),
+                        object : IOnSwipeControllerActions {
+                            override fun onClick(pos: Int) {
+                                viewModel.editPost(adapter.currentList[pos])
+                                val action = FeedFragmentDirections
+                                    .actionFeedFragmentToCreatePostFragment(
+                                        author = adapter.currentList[pos].author,
+                                        content = adapter.currentList[pos].content,
+                                        pictureName = adapter.currentList[pos].pictureName
+                                    )
+                                findNavController().navigate(action)
+                            }
+                        }
+                    )
                 )
             }
         }
@@ -129,14 +126,14 @@ class FeedFragment : Fragment() {
                 binding.rvPostList.adapter = adapter
                 viewModel.data.observe(viewLifecycleOwner) { posts ->
                     adapter.submitList(
-                            posts
-                                    .asSequence()
-                                    .sortedWith(compareBy { it.dateCompare })
-                                    .sortedWith { post1, post2 ->
-                                        (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
-                                    }
-                                    .toList()
-                                    .takeLast(pageItemLimit)
+                        posts
+                            .asSequence()
+                            .sortedWith(compareBy { it.dateCompare })
+                            .sortedWith { post1, post2 ->
+                                (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
+                            }
+                            .toList()
+                            .takeLast(pageItemLimit)
                     )
                 }
             } else {
@@ -157,15 +154,16 @@ class FeedFragment : Fragment() {
                             if (post.pictureName != "") {
                                 try {
                                     val fileDir = File(
-                                            binding.root.context?.filesDir,
-                                            "images")
+                                        binding.root.context?.filesDir,
+                                        "images"
+                                    )
                                     fileDir.mkdir()
                                     val file = File(fileDir.path, post.pictureName)
                                     flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                                     val uriImg = FileProvider.getUriForFile(
-                                            requireContext(),
-                                            BuildConfig.APPLICATION_ID,
-                                            file
+                                        requireContext(),
+                                        BuildConfig.APPLICATION_ID,
+                                        file
                                     )
                                     putExtra(Intent.EXTRA_STREAM, uriImg)
                                     type = "image/*"
@@ -176,32 +174,30 @@ class FeedFragment : Fragment() {
                             }
                         }
                         val shareIntent = Intent.createChooser(
-                                intent,
-                                getString(R.string.chooser_share_post)
+                            intent,
+                            getString(R.string.chooser_share_post)
                         )
                         startActivity(shareIntent)
                     }
 
                     override fun onPostAuthorClick(post: Post) {
-                        findNavController().navigate(
-                                R.id.action_feedFragment_to_authorListFragment,
-                                Bundle().apply {
-                                    authorFilter = post.author
-                                }
+                        val action = FeedFragmentDirections.actionFeedFragmentToAuthorListFragment(
+                            authorFilter = post.author
                         )
+                        findNavController().navigate(action)
                     }
                 })
                 binding.rvPostList.adapter = adapter
                 viewModel.data.observe(viewLifecycleOwner) { posts ->
                     adapter.submitList(
-                            posts
-                                    .asSequence()
-                                    .sortedWith(compareBy { it.dateCompare })
-                                    .sortedWith { post1, post2 ->
-                                        (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
-                                    }
-                                    .toList()
-                                    .takeLast(pageItemLimit)
+                        posts
+                            .asSequence()
+                            .sortedWith(compareBy { it.dateCompare })
+                            .sortedWith { post1, post2 ->
+                                (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
+                            }
+                            .toList()
+                            .takeLast(pageItemLimit)
                     )
                 }
             }
