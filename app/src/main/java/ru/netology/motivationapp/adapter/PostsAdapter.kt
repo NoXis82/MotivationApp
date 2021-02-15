@@ -64,10 +64,10 @@ class PostViewHolder(
                 }
             }
             tvAuthor.setOnClickListener {
-                onInteractionListener.onPostAuthorClick(post)
+               onInteractionListener.onPostAuthorClick(post)
             }
             ivAvatar.setOnClickListener {
-                onInteractionListener.onPostAuthorClick(post)
+                 onInteractionListener.onPostAuthorClick(post)
             }
             btnLikes.setOnClickListener {
                 onInteractionListener.onLike(post)

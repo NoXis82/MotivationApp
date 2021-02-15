@@ -25,14 +25,16 @@ class CreatePostFragment : Fragment() {
     private lateinit var binding: FragmentCreatePostBinding
     private var filename: String = ""
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentCreatePostBinding.inflate(layoutInflater)
         val author = arguments?.let { CreatePostFragmentArgs.fromBundle(it).author.trim() }
         val content = arguments?.let { CreatePostFragmentArgs.fromBundle(it).content.trim() }
-        val pictureName = arguments?.let { CreatePostFragmentArgs.fromBundle(it).pictureName.trim() }
+        val pictureName =
+            arguments?.let { CreatePostFragmentArgs.fromBundle(it).pictureName.trim() }
         binding.editQuery.setText(author)
         binding.editContent.setText(content)
         if (pictureName?.isNotEmpty() == true) {
@@ -73,9 +75,9 @@ class CreatePostFragment : Fragment() {
             with(binding.editContent) {
                 if (TextUtils.isEmpty(text)) {
                     Toast.makeText(
-                            context,
-                            context.getString(R.string.error_empty_post),
-                            Toast.LENGTH_LONG
+                        context,
+                        context.getString(R.string.error_empty_post),
+                        Toast.LENGTH_LONG
                     ).show()
                     return@setOnClickListener
                 }
@@ -86,9 +88,9 @@ class CreatePostFragment : Fragment() {
                 }
 
                 viewModel.changeContent(
-                        binding.editQuery.text.toString(),
-                        binding.editContent.text.toString(),
-                        filename
+                    binding.editQuery.text.toString(),
+                    binding.editContent.text.toString(),
+                    filename
                 )
                 viewModel.savePost()
                 AndroidUtils.hideKeyboard(requireView())

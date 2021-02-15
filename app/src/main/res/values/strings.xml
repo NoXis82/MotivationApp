@@ -12,5 +12,6 @@
     <string name="label_feed_fragment">Motivation list</string>
     <string name="label_fragment_create">Post create/edit</string>
     <string name="label_fragment_author">Posts author</string>
+    <string name="fab_add">add post</string>
 
 </resources>

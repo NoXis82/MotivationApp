@@ -12,5 +12,6 @@
     <string name="label_feed_fragment">Список мотиваций</string>
     <string name="label_fragment_create">Пост создать/редактировать</string>
     <string name="label_fragment_author">Посты автора</string>
+    <string name="fab_add">Добавить пост</string>
 
 </resources>
