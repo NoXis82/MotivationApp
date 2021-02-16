@@ -15,9 +15,9 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 abstract class SwipeHelper(
-        context: Context,
-        private val recyclerView: RecyclerView,
-        internal val buttonWidth: Int
+    context: Context,
+    private val recyclerView: RecyclerView,
+    internal val buttonWidth: Int
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
     private var buttonsList: MutableList<SwipeButton>? = null
     private var swipedPos = -1
@@ -44,8 +44,8 @@ abstract class SwipeHelper(
         val rect = Rect()
         swipedItem?.getGlobalVisibleRect(rect)
         if (event.action == MotionEvent.ACTION_DOWN ||
-                event.action == MotionEvent.ACTION_UP ||
-                event.action == MotionEvent.ACTION_MOVE
+            event.action == MotionEvent.ACTION_UP ||
+            event.action == MotionEvent.ACTION_MOVE
         ) {
             if (rect.top < point.y && rect.bottom > point.y) {
                 gestureDetector.onTouchEvent(event)
@@ -110,13 +110,13 @@ abstract class SwipeHelper(
     }
 
     abstract fun instantiateSwipeButtons(
-            viewHolder: RecyclerView.ViewHolder, buffer: MutableList<SwipeButton>
+        viewHolder: RecyclerView.ViewHolder, buffer: MutableList<SwipeButton>
     )
 
     override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
     ): Boolean = false
 
     override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
@@ -148,13 +148,13 @@ abstract class SwipeHelper(
     }
 
     override fun onChildDraw(
-            c: Canvas,
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            dX: Float,
-            dY: Float,
-            actionState: Int,
-            isCurrentlyActive: Boolean
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
     ) {
         val pos = viewHolder.adapterPosition
         var translationX = dX
@@ -176,24 +176,33 @@ abstract class SwipeHelper(
                 drawButton(c, itemView, buffer, pos, translationX)
             }
         }
-        super.onChildDraw(c, recyclerView, viewHolder, translationX, dY, actionState, isCurrentlyActive)
+        super.onChildDraw(
+            c,
+            recyclerView,
+            viewHolder,
+            translationX,
+            dY,
+            actionState,
+            isCurrentlyActive
+        )
     }
 
     private fun drawButton(
-            c: Canvas,
-            itemView: View,
-            buffer: MutableList<SwipeButton>,
-            pos: Int,
-            translationX: Float) {
+        c: Canvas,
+        itemView: View,
+        buffer: MutableList<SwipeButton>,
+        pos: Int,
+        translationX: Float
+    ) {
 
         var right = itemView.right.toFloat()
         val dButtonWidth = -1 * translationX / buffer.size
         for (button in buffer) {
             val left = right - dButtonWidth
             button.onDraw(
-                    c,
-                    RectF(left, itemView.top.toFloat(), right, itemView.bottom.toFloat()),
-                    pos
+                c,
+                RectF(left, itemView.top.toFloat(), right, itemView.bottom.toFloat()),
+                pos
             )
             right = left
         }

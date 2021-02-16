@@ -8,15 +8,14 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 
 class SwipeButton(
-        private val context: Context,
-        private val text: String,
-        private val imageResId: Int,
-        private val color: Int,
-        private val clickListener: IOnSwipeControllerActions
+    private val context: Context,
+    private val text: String,
+    private val imageResId: Int,
+    private val color: Int,
+    private val clickListener: IOnSwipeControllerActions
 ) {
     private var pos: Int = 0
     private var clickRegion: RectF? = null
-   // private val resources: Resources = context.resources
     fun onClick(x: Float, y: Float): Boolean {
         if (clickRegion != null && clickRegion!!.contains(x, y)) {
             clickListener.onClick(pos)
@@ -44,10 +43,11 @@ class SwipeButton(
             val d = ContextCompat.getDrawable(context, imageResId)
             val bitmap = drawableToBitmap(d)
             c.drawText(text, rectF.left + x, rectF.top + y + 10f, p)
-            c.drawBitmap(bitmap,
-                    (rectF.left + rectF.right) / 2 - bitmap.width / 2,
-                    (rectF.top + rectF.bottom) / 2 - bitmap.height,
-                    p
+            c.drawBitmap(
+                bitmap,
+                (rectF.left + rectF.right) / 2 - bitmap.width / 2,
+                (rectF.top + rectF.bottom) / 2 - bitmap.height,
+                p
             )
         }
         clickRegion = rectF
@@ -56,7 +56,8 @@ class SwipeButton(
 
     private fun drawableToBitmap(d: Drawable?): Bitmap {
         if (d is BitmapDrawable) return d.bitmap
-        val bitmap = Bitmap.createBitmap(d!!.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val bitmap =
+            Bitmap.createBitmap(d!!.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         d.setBounds(0, 0, canvas.width, canvas.height)
         d.draw(canvas)

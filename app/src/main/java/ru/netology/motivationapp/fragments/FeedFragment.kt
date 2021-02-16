@@ -22,8 +22,8 @@ import ru.netology.motivationapp.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
-    private var pageItemLimit = 1
-    private val LIMIT_ITEMS_LIST = 1
+    private var pageItemLimit = 20
+    private val MAX_LIMIT_ITEMS = 20
     lateinit var adapter: PostsAdapter
     lateinit var binding: FeedFragmentBinding
 
@@ -102,7 +102,7 @@ class FeedFragment : Fragment() {
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = true
-            pageItemLimit += LIMIT_ITEMS_LIST
+            pageItemLimit += MAX_LIMIT_ITEMS
             getPageItem()
         }
         return binding.root

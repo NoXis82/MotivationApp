@@ -1,6 +1,5 @@
 package ru.netology.motivationapp.adapter
 
-
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -15,13 +14,13 @@ import java.io.File
 import java.io.FileNotFoundException
 
 class PostsAdapter(
-        private val onInteractionListener: IOnInteractionListener
+    private val onInteractionListener: IOnInteractionListener
 ) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val postView = PostCardBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
         return PostViewHolder(postView, onInteractionListener)
     }
@@ -33,8 +32,8 @@ class PostsAdapter(
 }
 
 class PostViewHolder(
-        private val binding: PostCardBinding,
-        private val onInteractionListener: IOnInteractionListener
+    private val binding: PostCardBinding,
+    private val onInteractionListener: IOnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         binding.apply {
@@ -64,10 +63,10 @@ class PostViewHolder(
                 }
             }
             tvAuthor.setOnClickListener {
-               onInteractionListener.onPostAuthorClick(post)
+                onInteractionListener.onPostAuthorClick(post)
             }
             ivAvatar.setOnClickListener {
-                 onInteractionListener.onPostAuthorClick(post)
+                onInteractionListener.onPostAuthorClick(post)
             }
             btnLikes.setOnClickListener {
                 onInteractionListener.onLike(post)
@@ -97,8 +96,8 @@ private fun formatCountToStr(value: Int): String {
         0 -> "$value"
         in 1..9 -> {
             val str = "%.1f".format(value / 1000.0)
-                    .dropLastWhile { it == '0' }
-                    .dropLastWhile { it == '.' }
+                .dropLastWhile { it == '0' }
+                .dropLastWhile { it == '.' }
             "${str}K"
         }
         in 10..999 -> {
@@ -107,8 +106,8 @@ private fun formatCountToStr(value: Int): String {
         }
         else -> {
             val str = "%.1f".format(value / 1000000.0)
-                    .dropLastWhile { it == '0' }
-                    .dropLastWhile { it == '.' }
+                .dropLastWhile { it == '0' }
+                .dropLastWhile { it == '.' }
             "${str}М"
         }
     }
