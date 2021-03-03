@@ -17,10 +17,11 @@ import ru.netology.motivationapp.dto.Post
 import ru.netology.motivationapp.swipecontroller.IOnSwipeControllerActions
 import ru.netology.motivationapp.swipecontroller.SwipeButton
 import ru.netology.motivationapp.swipecontroller.SwipeHelper
+import ru.netology.motivationapp.viewmodel.AuthorViewModel
 import ru.netology.motivationapp.viewmodel.PostViewModel
 
 class AuthorListFragment : Fragment() {
-    private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: AuthorViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,49 +47,49 @@ class AuthorListFragment : Fragment() {
 
             }
         })
-        object : SwipeHelper(requireContext(), binding.rvAuthorPostList, 200) {
-            override fun instantiateSwipeButtons(
-                viewHolder: RecyclerView.ViewHolder,
-                buffer: MutableList<SwipeButton>
-            ) {
-                buffer.add(
-                    SwipeButton(
-                        requireContext(),
-                        "Delete",
-                        0,
-                        Color.parseColor("#FF3C30"),
-                        object : IOnSwipeControllerActions {
-                            override fun onClick(pos: Int) {
-                                viewModel.remove(adapter.currentList[pos].id)
-                                adapter.notifyItemRemoved(pos)
-                                adapter.notifyItemRangeChanged(pos, adapter.itemCount)
-                            }
-                        }
-                    )
-                )
-                buffer.add(
-                    SwipeButton(
-                        requireContext(),
-                        "Edit",
-                        0,
-                        Color.parseColor("#FF9502"),
-                        object : IOnSwipeControllerActions {
-                            override fun onClick(pos: Int) {
-                                viewModel.editPost(adapter.currentList[pos])
-                                val action = AuthorListFragmentDirections
-                                    .actionAuthorListFragmentToCreatePostFragment(
-                                        author = adapter.currentList[pos].author,
-                                        content = adapter.currentList[pos].content,
-                                        pictureName = adapter.currentList[pos].pictureName
-                                    )
-                                findNavController().navigate(action)
-                            }
-
-                        }
-                    )
-                )
-            }
-        }
+//        object : SwipeHelper(requireContext(), binding.rvAuthorPostList, 200) {
+//            override fun instantiateSwipeButtons(
+//                viewHolder: RecyclerView.ViewHolder,
+//                buffer: MutableList<SwipeButton>
+//            ) {
+//                buffer.add(
+//                    SwipeButton(
+//                        requireContext(),
+//                        "Delete",
+//                        0,
+//                        Color.parseColor("#FF3C30"),
+//                        object : IOnSwipeControllerActions {
+//                            override fun onClick(pos: Int) {
+//                                viewModel.remove(adapter.currentList[pos].id)
+//                                adapter.notifyItemRemoved(pos)
+//                                adapter.notifyItemRangeChanged(pos, adapter.itemCount)
+//                            }
+//                        }
+//                    )
+//                )
+//                buffer.add(
+//                    SwipeButton(
+//                        requireContext(),
+//                        "Edit",
+//                        0,
+//                        Color.parseColor("#FF9502"),
+//                        object : IOnSwipeControllerActions {
+//                            override fun onClick(pos: Int) {
+//                                viewModel.editPost(adapter.currentList[pos])
+//                                val action = AuthorListFragmentDirections
+//                                    .actionAuthorListFragmentToCreatePostFragment(
+//                                        author = adapter.currentList[pos].author,
+//                                        content = adapter.currentList[pos].content,
+//                                        pictureName = adapter.currentList[pos].pictureName
+//                                    )
+//                                findNavController().navigate(action)
+//                            }
+//
+//                        }
+//                    )
+//                )
+//            }
+//        }
         binding.rvAuthorPostList.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(

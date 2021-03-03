@@ -1,6 +1,7 @@
-package ru.netology.motivationapp.db
+package ru.netology.motivationapp
 
 import android.app.Application
+import ru.netology.motivationapp.db.AppDb
 import ru.netology.motivationapp.repository.IPostRepository
 import ru.netology.motivationapp.repository.PostRepositorySQLite
 

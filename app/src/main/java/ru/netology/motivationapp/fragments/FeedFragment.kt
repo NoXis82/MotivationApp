@@ -18,10 +18,14 @@ import ru.netology.motivationapp.dto.*
 import ru.netology.motivationapp.swipecontroller.IOnSwipeControllerActions
 import ru.netology.motivationapp.swipecontroller.SwipeButton
 import ru.netology.motivationapp.swipecontroller.SwipeHelper
+import ru.netology.motivationapp.viewmodel.FeedViewModel
 import ru.netology.motivationapp.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
-    private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+ //   private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: FeedViewModel by viewModels(ownerProducer = ::requireParentFragment)
+
+
     private var pageItemLimit = 20
     private val MAX_LIMIT_ITEMS = 20
     lateinit var adapter: PostsAdapter
@@ -55,48 +59,52 @@ class FeedFragment : Fragment() {
             }
         })
         getPageItem()
-        object : SwipeHelper(requireContext(), binding.rvPostList, 200) {
-            override fun instantiateSwipeButtons(
-                viewHolder: RecyclerView.ViewHolder,
-                buffer: MutableList<SwipeButton>
-            ) {
-                buffer.add(
-                    SwipeButton(
-                        requireContext(),
-                        getString(R.string.delete),
-                        R.drawable.ic_delete_24,
-                        Color.parseColor("#FF3C30"),
-                        object : IOnSwipeControllerActions {
-                            override fun onClick(pos: Int) {
-                                viewModel.remove(adapter.currentList[pos].id)
-                                adapter.notifyItemRemoved(pos)
-                                adapter.notifyItemRangeChanged(pos, adapter.itemCount)
-                            }
-                        }
-                    )
-                )
-                buffer.add(
-                    SwipeButton(
-                        requireContext(),
-                        getString(R.string.edit),
-                        R.drawable.ic_edit_24,
-                        Color.parseColor("#FF9502"),
-                        object : IOnSwipeControllerActions {
-                            override fun onClick(pos: Int) {
-                                viewModel.editPost(adapter.currentList[pos])
-                                val action = FeedFragmentDirections
-                                    .actionFeedFragmentToCreatePostFragment(
-                                        author = adapter.currentList[pos].author,
-                                        content = adapter.currentList[pos].content,
-                                        pictureName = adapter.currentList[pos].pictureName
-                                    )
-                                findNavController().navigate(action)
-                            }
-                        }
-                    )
-                )
-            }
-        }
+        val view = inflater.inflate(R.layout.feed_fragment, container, false)
+        viewModel.InitSwipeHelper(requireContext(), binding.rvPostList, 200, adapter, view)
+
+//        object : SwipeHelper(requireContext(), binding.rvPostList, 200,
+//        adapter) {
+//            override fun instantiateSwipeButtons(
+//                viewHolder: RecyclerView.ViewHolder,
+//                buffer: MutableList<SwipeButton>
+//            ) {
+//                buffer.add(
+//                    SwipeButton(
+//                        requireContext(),
+//                        getString(R.string.delete),
+//                        R.drawable.ic_delete_24,
+//                        Color.parseColor("#FF3C30"),
+//                        object : IOnSwipeControllerActions {
+//                            override fun onClick(pos: Int) {
+//                                viewModel.remove(adapter.currentList[pos].id)
+//                                adapter.notifyItemRemoved(pos)
+//                                adapter.notifyItemRangeChanged(pos, adapter.itemCount)
+//                            }
+//                        }
+//                    )
+//                )
+//                buffer.add(
+//                    SwipeButton(
+//                        requireContext(),
+//                        getString(R.string.edit),
+//                        R.drawable.ic_edit_24,
+//                        Color.parseColor("#FF9502"),
+//                        object : IOnSwipeControllerActions {
+//                            override fun onClick(pos: Int) {
+//                                viewModel.editPost(adapter.currentList[pos])
+//                                val action = FeedFragmentDirections
+//                                    .actionFeedFragmentToCreatePostFragment(
+//                                        author = adapter.currentList[pos].author,
+//                                        content = adapter.currentList[pos].content,
+//                                        pictureName = adapter.currentList[pos].pictureName
+//                                    )
+//                                findNavController().navigate(action)
+//                            }
+//                        }
+//                    )
+//                )
+//            }
+//        }
         binding.fabAddPost.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_createPostFragment)
         }

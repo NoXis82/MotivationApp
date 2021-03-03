@@ -9,7 +9,9 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.netology.motivationapp.adapter.PostsAdapter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -17,7 +19,9 @@ import kotlin.collections.HashMap
 abstract class SwipeHelper(
     context: Context,
     private val recyclerView: RecyclerView,
-    internal val buttonWidth: Int
+    internal val buttonWidth: Int,
+    private val adapter: PostsAdapter,
+    private val view: View
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
     private var buttonsList: MutableList<SwipeButton>? = null
     private var swipedPos = -1

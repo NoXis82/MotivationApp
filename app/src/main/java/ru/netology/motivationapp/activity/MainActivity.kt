@@ -1,9 +1,10 @@
-package ru.netology.motivationapp
+package ru.netology.motivationapp.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import ru.netology.motivationapp.R
 
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {

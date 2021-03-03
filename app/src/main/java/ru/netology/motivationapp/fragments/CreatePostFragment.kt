@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import ru.netology.motivationapp.R
 import ru.netology.motivationapp.databinding.FragmentCreatePostBinding
 import ru.netology.motivationapp.utils.AndroidUtils
+import ru.netology.motivationapp.viewmodel.CreatePostViewModel
 import ru.netology.motivationapp.viewmodel.PostViewModel
 import java.io.*
 
@@ -24,7 +25,11 @@ class CreatePostFragment : Fragment() {
     private val REQUEST_CODE = 100
     private lateinit var binding: FragmentCreatePostBinding
     private var filename: String = ""
-    private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+
+    //private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+   private val viewModel: CreatePostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
