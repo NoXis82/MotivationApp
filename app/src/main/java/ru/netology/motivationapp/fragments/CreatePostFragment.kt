@@ -2,8 +2,6 @@ package ru.netology.motivationapp.fragments
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -18,18 +16,13 @@ import ru.netology.motivationapp.R
 import ru.netology.motivationapp.databinding.FragmentCreatePostBinding
 import ru.netology.motivationapp.utils.AndroidUtils
 import ru.netology.motivationapp.viewmodel.CreatePostViewModel
-import ru.netology.motivationapp.viewmodel.PostViewModel
 import java.io.*
 
 class CreatePostFragment : Fragment() {
     private val REQUEST_CODE = 100
     private lateinit var binding: FragmentCreatePostBinding
     private var filename: String = ""
-
-    //private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
-   private val viewModel: CreatePostViewModel by viewModels(ownerProducer = ::requireParentFragment)
-
-
+    private val viewModel: CreatePostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,11 +39,7 @@ class CreatePostFragment : Fragment() {
             filename = pictureName
             binding.frameImage.visibility = View.VISIBLE
             try {
-                val fileDir = File(binding.root.context?.filesDir, "images")
-                fileDir.mkdir()
-                val file = File(fileDir, pictureName)
-                val bitmap = BitmapFactory.decodeFile(file.toString())
-                binding.viewLoadImage.setImageBitmap(bitmap)
+                binding.viewLoadImage.setImageBitmap(viewModel.loadImage(pictureName))
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
             }
@@ -75,7 +64,6 @@ class CreatePostFragment : Fragment() {
             binding.frameImage.visibility = View.GONE
             filename = ""
         }
-
         binding.fabBtnSave.setOnClickListener {
             with(binding.editContent) {
                 if (TextUtils.isEmpty(text)) {
@@ -89,9 +77,8 @@ class CreatePostFragment : Fragment() {
                 val drawable = binding.viewLoadImage.drawable
                 if (drawable != null && filename.isNotEmpty()) {
                     val bitmap = drawable.toBitmap()
-                    saveImageToExternal(bitmap)
+                    viewModel.saveImageToExternal(bitmap, filename)
                 }
-
                 viewModel.changeContent(
                     binding.editQuery.text.toString(),
                     binding.editContent.text.toString(),
@@ -103,24 +90,6 @@ class CreatePostFragment : Fragment() {
             }
         }
         return binding.root
-    }
-
-    private fun saveImageToExternal(bitmap: Bitmap) {
-        val fileDir = File(context?.filesDir, "images")
-        fileDir.mkdir()
-        val file = File(fileDir, filename)
-        if (file.exists()) {
-            file.delete()
-        }
-        try {
-            val streamOut = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, streamOut)
-            streamOut.flush()
-            streamOut.close()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Toast.makeText(context, getString(R.string.error_save_image), Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

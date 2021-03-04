@@ -8,8 +8,8 @@ import android.graphics.RectF
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.motivationapp.adapter.PostsAdapter
 import java.util.*
@@ -21,7 +21,7 @@ abstract class SwipeHelper(
     private val recyclerView: RecyclerView,
     internal val buttonWidth: Int,
     private val adapter: PostsAdapter,
-    private val view: View
+    private val navigation: NavController
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
     private var buttonsList: MutableList<SwipeButton>? = null
     private var swipedPos = -1
