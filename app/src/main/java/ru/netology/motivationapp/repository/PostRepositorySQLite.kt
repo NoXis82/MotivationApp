@@ -8,20 +8,18 @@ import ru.netology.motivationapp.dto.PostEntity
 import ru.netology.motivationapp.dto.toPost
 
 class PostRepositorySQLite(
-        private val dao: PostDao
+    private val dao: PostDao
 ) : IPostRepository {
+
+    override fun getPosts(): LiveData<List<Post>> =
+        dao.getPosts().map { it.map(PostEntity::toPost) }
+
     override fun like(id: Long) {
         dao.likeById(id)
     }
 
     override fun dislike(id: Long) {
         dao.dislikeById(id)
-    }
-
-    override fun getAll(): LiveData<List<Post>> = dao.getAll().map { list ->
-        list.map {
-            it.toPost()
-        }
     }
 
     override fun savePost(post: Post) {
@@ -31,4 +29,9 @@ class PostRepositorySQLite(
     override fun removePost(id: Long) {
         dao.removeById(id)
     }
+
+    override fun count(): Long = dao.count()
+
+    override fun getRangePosts(startPos: Long, endPos: Long): List<Post> =
+        dao.getRangePosts(startPos, endPos).map(PostEntity::toPost)
 }

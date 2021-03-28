@@ -77,9 +77,6 @@ dependencies {
 
     def swiperefreshlayout_version = "1.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshlayout_version"
-
-
-
     testImplementation 'junit:junit:4.+'
     androidTestImplementation "androidx.test.ext:junit:$junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"

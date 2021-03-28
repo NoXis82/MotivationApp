@@ -1,27 +1,23 @@
 package ru.netology.motivationapp.viewmodel
 
 import android.app.Application
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import androidx.core.content.FileProvider
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.navigation.*
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.*
 import ru.netology.motivationapp.App
 import ru.netology.motivationapp.BuildConfig
 import ru.netology.motivationapp.R
-import ru.netology.motivationapp.adapter.PostsAdapter
 import ru.netology.motivationapp.dto.Post
-import ru.netology.motivationapp.fragments.FeedFragmentDirections
-import ru.netology.motivationapp.swipecontroller.IOnSwipeControllerActions
-import ru.netology.motivationapp.swipecontroller.SwipeButton
-import ru.netology.motivationapp.swipecontroller.SwipeHelper
+import ru.netology.motivationapp.model.FeedModel
 import java.io.File
 import java.io.FileNotFoundException
 
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
+    companion object {
+        private const val STEP_LIMIT = 20L
+    }
+    private var startPos = 0L
+    private var endPos = STEP_LIMIT
     private val empty = Post(
         id = 0,
         author = "",
@@ -31,13 +27,47 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         dateCompare = 0
     )
     private val repository = App.repositorySQLite
-    val data = repository.getAll()
+    private var cash = emptyList<Post>()
+    private val totalItems = repository.count()
     private val edited = MutableLiveData(empty)
+    private val _state = MutableLiveData(FeedModel())
+    val state: LiveData<FeedModel>
+        get() = _state
+    private var _data = MutableLiveData<List<Post>>()
+    val data: LiveData<List<Post>>
+        get() = _data
     fun remove(id: Long) = repository.removePost(id)
     fun like(id: Long) = repository.like(id)
     fun dislike(id: Long) = repository.dislike(id)
     fun editPost(post: Post) {
         edited.value = post
+    }
+
+    init {
+        load()
+    }
+
+    private fun load() {
+        _state.value = FeedModel(loading = true)
+        _data.value = repository.getRangePosts(startPos, endPos)
+        _state.value = FeedModel()
+    }
+
+    fun sortedList(posts: List<Post>): List<Post> = posts
+            .sortedWith(compareBy { it.dateCompare })
+            .sortedWith { post1, post2 ->
+                (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
+            }
+
+    fun refreshPosts() {
+        _state.value = FeedModel(loading = true)
+        val totalItems = repository.count()
+        if (totalItems > endPos) {
+            startPos += STEP_LIMIT
+            endPos += STEP_LIMIT
+            _data.value = _data.value?.plus(repository.getRangePosts(startPos, endPos))
+        }
+        _state.value = FeedModel()
     }
 
     fun sharePost(post: Post) {
@@ -74,4 +104,5 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         }
         getApplication<Application>().startActivity(shareIntent)
     }
+
 }

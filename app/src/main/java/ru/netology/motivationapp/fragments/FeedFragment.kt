@@ -1,10 +1,10 @@
 package ru.netology.motivationapp.fragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,8 +17,6 @@ import ru.netology.motivationapp.viewmodel.FeedViewModel
 
 class FeedFragment : Fragment() {
     private val viewModel: FeedViewModel by viewModels(ownerProducer = ::requireParentFragment)
-    private var pageItemLimit = 2
-    private val MAX_LIMIT_ITEMS = 20
     lateinit var adapter: PostsAdapter
     lateinit var binding: FeedFragmentBinding
 
@@ -46,7 +44,6 @@ class FeedFragment : Fragment() {
                 viewModel.authorListFilter(post, findNavController())
             }
         })
-        getPageItem()
         viewModel.InitSwipeHelper(
             requireContext(),
             binding.rvPostList,
@@ -58,27 +55,18 @@ class FeedFragment : Fragment() {
             findNavController().navigate(R.id.action_feedFragment_to_createPostFragment)
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
-            binding.swipeRefreshLayout.isRefreshing = true
-            //pageItemLimit += MAX_LIMIT_ITEMS
-            getPageItem()
+            viewModel.refreshPosts()
+        }
+        binding.rvPostList.adapter = adapter
+
+        viewModel.data.observe(viewLifecycleOwner) {
+            adapter.submitList(viewModel.sortedList(it))
+        }
+
+        viewModel.state.observe(viewLifecycleOwner) { model ->
+            binding.swipeRefreshLayout.isRefreshing = model.refreshing
+            binding.pbProgress.isVisible = model.loading
         }
         return binding.root
-    }
-
-    private fun getPageItem() {
-        binding.rvPostList.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(
-                posts
-                    .asSequence()
-                    .sortedWith(compareBy { it.dateCompare })
-                    .sortedWith { post1, post2 ->
-                        (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
-                    }
-                    .toList()
-                    .takeLast(posts.size)
-            )
-        }
-        binding.swipeRefreshLayout.isRefreshing = false
     }
 }

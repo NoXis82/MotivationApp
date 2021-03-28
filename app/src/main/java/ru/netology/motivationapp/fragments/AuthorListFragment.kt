@@ -50,18 +50,18 @@ class AuthorListFragment : Fragment() {
             findNavController()
         )
         binding.rvAuthorPostList.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(
-                posts
-                    .asSequence()
-                    .filter { it.author == authorFilter }
-                    .sortedWith(compareBy { it.dateCompare })
-                    .sortedWith { post1, post2 ->
-                        (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
-                    }
-                    .toList()
-            )
-        }
+//        viewModel.data.observe(viewLifecycleOwner) { posts ->
+//            adapter.submitList(
+//                posts
+//                    .asSequence()
+//                    .filter { it.author == authorFilter }
+//                    .sortedWith(compareBy { it.dateCompare })
+//                    .sortedWith { post1, post2 ->
+//                        (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
+//                    }
+//                    .toList()
+//            )
+//        }
         return binding.root
     }
 }

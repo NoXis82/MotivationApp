@@ -11,8 +11,8 @@ import java.util.*
 @Dao
 interface PostDao {
 
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
-    fun getAll(): LiveData<List<PostEntity>>
+    @Query("SELECT * FROM PostEntity")
+    fun getPosts(): LiveData<List<PostEntity>>
 
     @Insert
     fun insert(post: PostEntity)
@@ -50,5 +50,13 @@ interface PostDao {
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
     fun removeById(id: Long)
+
+    @Query("SELECT COUNT (*) FROM PostEntity")
+    fun count(): Long
+
+    @Query("SELECT * FROM PostEntity WHERE id > :startPos AND id < :endPos")
+    fun getRangePosts(startPos: Long, endPos: Long): List<PostEntity>
+
+
 
 }
