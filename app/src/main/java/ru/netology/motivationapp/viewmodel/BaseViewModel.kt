@@ -16,6 +16,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     companion object {
         private const val STEP_LIMIT = 20L
     }
+
     private var startPos = 0L
     private var endPos = STEP_LIMIT
     private val empty = Post(
@@ -36,6 +37,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     private var _data = MutableLiveData<List<Post>>()
     val data: LiveData<List<Post>>
         get() = _data
+
     fun remove(id: Long) = repository.removePost(id)
     fun like(id: Long) = repository.like(id)
     fun dislike(id: Long) = repository.dislike(id)
@@ -54,11 +56,17 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun sortedList(posts: List<Post>): List<Post> = posts
-            .sortedWith(compareBy { it.dateCompare })
-            .sortedWith { post1, post2 ->
-                (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
-            }
+        .sortedWith(compareBy { it.dateCompare })
+        .sortedWith { post1, post2 ->
+            (post2.likes - post2.dislike) - (post1.likes - post1.dislike)
+        }
 
+// В этом методе у меня по идее подгрузка. Но такой способ никак не подходит.
+// Во первых при данном способе не поучается оргазивать LiveData.
+// Во вторых криво работает сортировка данных, так как при подгрузки они перемешиваються с общем списком.
+// В третьих каким образом организовать логику по вычислению следующих id (учитывать добавления нового поста, учитывать общее число строк_
+// Вообщем я не очень представляю каким образом можно организовать подгрузку таким методом да и реально ли это вообще =)
+    
     fun refreshPosts() {
         _state.value = FeedModel(loading = true)
         val totalItems = repository.count()
